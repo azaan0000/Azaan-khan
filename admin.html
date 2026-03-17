@@ -3,58 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Azaan | Command Center</title>
+    <title>Azaan Khan | Admin Control</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
     <style>
-        .glass { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.1); }
-        .input-style { background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); padding: 12px; border-radius: 12px; width: 100%; color: white; outline: none; transition: 0.3s; }
-        .input-style:focus { border-color: #0ea5e9; }
+        body { background-color: #020617; }
+        .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.1); }
     </style>
 </head>
-<body class="bg-slate-950 text-white font-sans min-h-screen">
+<body class="text-white min-h-screen flex items-center justify-center p-6">
 
-    <div class="max-w-xl mx-auto px-6 py-10">
-        <h1 class="text-3xl font-black text-center mb-8 tracking-tighter text-sky-500 underline underline-offset-8">ADMIN CONTROL</h1>
-
-        <div class="glass p-8 rounded-[2.5rem] mb-6 text-center">
-            <div class="relative inline-block group cursor-pointer" onclick="window.open('https://imgbb.com/upload', '_blank')">
-                <img id="preview-pic" src="https://via.placeholder.com/150" class="w-24 h-24 rounded-full mx-auto border-4 border-sky-500 object-cover mb-4">
-                <div class="absolute inset-0 bg-black/40 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition">
-                    <i class="fas fa-camera text-xl"></i>
-                </div>
-                <p class="text-[10px] text-gray-400 mt-2">Click Pic to Upload New</p>
-            </div>
-            <input id="pic-url" type="text" placeholder="Paste New Photo Link Here" class="input-style mt-4 text-sm">
+    <div class="max-w-md w-full glass p-8 rounded-[2.5rem] shadow-2xl">
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-black italic tracking-tighter uppercase text-sky-500">Admin Panel</h1>
+            <p class="text-[10px] text-gray-500 font-bold uppercase tracking-widest mt-1">Control your Hub in Real-time</p>
         </div>
 
-        <div class="glass p-8 rounded-[2.5rem] mb-6 space-y-4">
-            <h2 class="text-xs font-bold text-sky-400 tracking-widest uppercase">Gaming IDs</h2>
-            <div class="grid grid-cols-2 gap-3">
-                <input id="ff-n" type="text" placeholder="FF Name" class="input-style text-xs">
-                <input id="ff-i" type="text" placeholder="FF ID" class="input-style text-xs">
+        <div class="space-y-6">
+            <div>
+                <label class="block text-[10px] font-black uppercase tracking-widest text-gray-400 mb-2 px-2">Profile Image URL</label>
+                <input type="text" id="picUrl" placeholder="Paste image link here..." 
+                    class="w-full bg-slate-900/50 border border-white/10 p-4 rounded-2xl text-sm focus:border-sky-500 outline-none transition">
             </div>
-            <div class="grid grid-cols-2 gap-3">
-                <input id="pb-n" type="text" placeholder="PUBG Name" class="input-style text-xs">
-                <input id="pb-i" type="text" placeholder="PUBG ID" class="input-style text-xs">
+
+            <div>
+                <label class="block text-[10px] font-black uppercase tracking-widest text-gray-400 mb-2 px-2">Latest YouTube Video ID</label>
+                <input type="text" id="latestYT" placeholder="Example: UGWXAN8p73w" 
+                    class="w-full bg-slate-900/50 border border-white/10 p-4 rounded-2xl text-sm focus:border-red-500 outline-none transition">
+                <p class="text-[9px] text-gray-600 mt-2 px-2 italic uppercase font-bold">* Just the code after v= in the link</p>
             </div>
+
+            <div>
+                <label class="block text-[10px] font-black uppercase tracking-widest text-gray-400 mb-2 px-2">Facebook Card Text</label>
+                <textarea id="fbUpdateText" rows="3" placeholder="What's on your mind?" 
+                    class="w-full bg-slate-900/50 border border-white/10 p-4 rounded-2xl text-sm focus:border-blue-500 outline-none transition resize-none"></textarea>
+            </div>
+
+            <button onclick="updateData()" id="updateBtn" 
+                class="w-full bg-sky-600 hover:bg-sky-500 py-4 rounded-2xl font-black uppercase text-xs tracking-[0.2em] shadow-lg shadow-sky-600/20 transition-all active:scale-95">
+                Update Website
+            </button>
+
+            <div id="status" class="text-center text-[10px] font-bold uppercase tracking-widest hidden italic"></div>
         </div>
 
-        <div class="glass p-8 rounded-[2.5rem] mb-8">
-            <h2 class="text-xs font-bold text-red-500 tracking-widest uppercase mb-4">Post Management</h2>
-            <p class="text-[10px] text-gray-500 mb-4">Paste link of any YouTube/Facebook/TikTok post to feature it.</p>
-            <input id="post-url" type="text" placeholder="Paste Post URL" class="input-style text-sm mb-2">
-            <input id="post-title" type="text" placeholder="Post Title (e.g. My New Video)" class="input-style text-sm">
-        </div>
-
-        <button onclick="updateData()" class="w-full bg-sky-600 hover:bg-sky-500 text-white py-5 rounded-3xl font-bold shadow-lg shadow-sky-900/20 transition-all active:scale-95 flex items-center justify-center gap-2">
-            <i class="fas fa-save"></i> UPDATE LIVE WEBSITE
-        </button>
+        <footer class="mt-8 text-center text-[9px] text-gray-700 font-bold uppercase tracking-widest">
+            Azaan Khan Official &copy; 2026
+        </footer>
     </div>
 
     <script>
+        // Aapka Firebase Config
         const firebaseConfig = { 
             apiKey: "AIzaSyC1H9oxa0ZI7vbXDPGxvmHdwT0WrqDC92s", 
             databaseURL: "https://azaan-web-default-rtdb.firebaseio.com", 
@@ -63,18 +64,48 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
+        // Pehle se mujood data load karna
+        db.ref('profile').on('value', (snapshot) => {
+            const data = snapshot.val();
+            if(data) {
+                if(data.picUrl) document.getElementById('picUrl').value = data.picUrl;
+                if(data.latestYT) document.getElementById('latestYT').value = data.latestYT;
+                if(data.fbUpdateText) document.getElementById('fbUpdateText').value = data.fbUpdateText;
+            }
+        });
+
+        // Data Update karne ka function
         function updateData() {
-            db.ref('profile').set({
-                picUrl: document.getElementById('pic-url').value,
-                ffName: document.getElementById('ff-n').value,
-                ffId: document.getElementById('ff-i').value,
-                pubgName: document.getElementById('pb-n').value,
-                pubgId: document.getElementById('pb-i').value,
-                latestPost: document.getElementById('post-url').value,
-                postTitle: document.getElementById('post-title').value
-            }).then(() => {
-                alert("Mubarak ho Azaan! Website update ho gayi.");
-            });
+            const btn = document.getElementById('updateBtn');
+            const status = document.getElementById('status');
+            
+            const newData = {
+                picUrl: document.getElementById('picUrl').value,
+                latestYT: document.getElementById('latestYT').value,
+                fbUpdateText: document.getElementById('fbUpdateText').value
+            };
+
+            btn.innerText = "Updating...";
+            btn.disabled = true;
+
+            db.ref('profile').update(newData)
+                .then(() => {
+                    btn.innerText = "Update Website";
+                    btn.disabled = false;
+                    status.innerText = "Website Updated Successfully!";
+                    status.classList.remove('hidden', 'text-red-500');
+                    status.classList.add('text-green-500');
+                    
+                    setTimeout(() => status.classList.add('hidden'), 3000);
+                })
+                .catch((error) => {
+                    console.error(error);
+                    btn.innerText = "Update Website";
+                    btn.disabled = false;
+                    status.innerText = "Error: Update Failed";
+                    status.classList.remove('hidden', 'text-green-500');
+                    status.classList.add('text-red-500');
+                });
         }
     </script>
 </body>
