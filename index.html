@@ -8,8 +8,11 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+    <style>
+        .glass-card { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); }
+    </style>
 </head>
-<body class="bg-slate-950 text-white font-sans">
+<body class="bg-slate-950 text-white font-sans scroll-smooth">
 
     <a href="https://wa.me/923705840165" target="_blank" class="fixed bottom-6 right-6 bg-[#25D366] w-14 h-14 rounded-full flex items-center justify-center text-2xl shadow-2xl z-50 hover:scale-110 transition">
         <i class="fab fa-whatsapp"></i>
@@ -26,31 +29,31 @@
         </header>
 
         <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-12">
-            <a href="https://youtube.com/@theislamicpathazn" target="_blank" class="bg-white/5 p-4 rounded-2xl hover:bg-red-600/20 border border-white/10 transition group">
+            <a href="https://youtube.com/@theislamicpathazn" target="_blank" class="glass-card p-4 rounded-2xl hover:bg-red-600/20 transition group">
                 <i class="fab fa-youtube text-red-500 text-2xl mb-1"></i>
                 <p class="text-[10px] font-bold">YOUTUBE</p>
             </a>
-            <a href="https://www.tiktok.com/@aaazaan0" target="_blank" class="bg-white/5 p-4 rounded-2xl hover:bg-white/10 border border-white/10 transition">
+            <a href="https://www.tiktok.com/@aaazaan0" target="_blank" class="glass-card p-4 rounded-2xl hover:bg-white/10 transition">
                 <i class="fab fa-tiktok text-white text-2xl mb-1"></i>
                 <p class="text-[10px] font-bold">TIKTOK</p>
             </a>
-            <a href="https://www.snapchat.com/add/aaazaan786" target="_blank" class="bg-white/5 p-4 rounded-2xl hover:bg-yellow-400/20 border border-white/10 transition">
+            <a href="https://www.snapchat.com/add/aaazaan786" target="_blank" class="glass-card p-4 rounded-2xl hover:bg-yellow-400/20 transition">
                 <i class="fab fa-snapchat text-yellow-400 text-2xl mb-1"></i>
                 <p class="text-[10px] font-bold">SNAPCHAT</p>
             </a>
-            <a href="https://www.facebook.com/share/18PvuAgBZx/" target="_blank" class="bg-white/5 p-4 rounded-2xl hover:bg-blue-600/20 border border-white/10 transition">
+            <a href="https://www.facebook.com/share/18PvuAgBZx/" target="_blank" class="glass-card p-4 rounded-2xl hover:bg-blue-600/20 transition">
                 <i class="fab fa-facebook-f text-blue-500 text-2xl mb-1"></i>
                 <p class="text-[10px] font-bold">FACEBOOK</p>
             </a>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-12 text-left">
-            <div class="bg-white/5 p-6 rounded-3xl border-l-4 border-yellow-500 backdrop-blur-md">
+            <div class="glass-card p-6 rounded-3xl border-l-4 border-yellow-500">
                 <span class="text-[10px] font-bold text-yellow-500 uppercase tracking-widest">Free Fire</span>
                 <p id="ff-name" class="text-xl font-black mt-1 uppercase">AAA々DANGER</p>
                 <p id="ff-id" class="text-xs text-gray-500 font-mono">ID: 13085487301</p>
             </div>
-            <div class="bg-white/5 p-6 rounded-3xl border-l-4 border-orange-500 backdrop-blur-md">
+            <div class="glass-card p-6 rounded-3xl border-l-4 border-orange-500">
                 <span class="text-[10px] font-bold text-orange-500 uppercase tracking-widest">PUBG Mobile</span>
                 <p id="pubg-name" class="text-xl font-black mt-1 uppercase">"AAA"</p>
                 <p id="pubg-id" class="text-xs text-gray-500 font-mono">ID: 52183640460</p>
@@ -58,14 +61,37 @@
         </div>
 
         <div class="space-y-12">
+            
             <section class="text-left">
-                <h2 class="text-sm font-bold mb-4 flex items-center text-gray-400 uppercase tracking-widest px-2">
-                    <i class="fab fa-youtube text-red-600 mr-2"></i> Latest Content
+                <h2 class="text-xs font-bold mb-4 flex items-center text-gray-400 uppercase tracking-widest px-2">
+                    <i class="fab fa-youtube text-red-600 mr-2 text-lg"></i> YouTube Latest
                 </h2>
                 <div class="rounded-3xl overflow-hidden border border-white/10 shadow-2xl bg-black aspect-video">
                     <iframe class="w-full h-full" src="https://www.youtube.com/embed?listType=user_uploads&list=theislamicpathazn" frameborder="0" allowfullscreen></iframe>
                 </div>
             </section>
+
+            <section class="text-left">
+                <h2 class="text-xs font-bold mb-4 flex items-center text-gray-400 uppercase tracking-widest px-2">
+                    <i class="fab fa-tiktok text-white mr-2 text-lg"></i> TikTok Highlights
+                </h2>
+                <div class="glass-card p-4 rounded-3xl overflow-hidden shadow-2xl">
+                    <blockquote class="tiktok-embed" cite="https://www.tiktok.com/@aaazaan0" data-unique-id="aaazaan0" data-embed-type="creator" style="max-width: 100%; min-width: 288px;">
+                        <section><a target="_blank" href="https://www.tiktok.com/@aaazaan0?refer=embed">@aaazaan0</a></section>
+                    </blockquote>
+                    <script async src="https://www.tiktok.com/embed.js"></script>
+                </div>
+            </section>
+
+            <section class="text-left">
+                <h2 class="text-xs font-bold mb-4 flex items-center text-gray-400 uppercase tracking-widest px-2">
+                    <i class="fab fa-facebook text-blue-500 mr-2 text-lg"></i> Facebook Updates
+                </h2>
+                <div class="glass-card rounded-3xl overflow-hidden shadow-2xl bg-white/5">
+                    <iframe src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2Fshare%2F18PvuAgBZx%2F&tabs=timeline&width=500&height=500&small_header=true&adapt_container_width=true&hide_cover=false&show_facepile=true" width="100%" height="450" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
+                </div>
+            </section>
+
         </div>
 
         <footer class="mt-20 text-[9px] text-gray-600 tracking-[0.5em] font-bold uppercase">
@@ -82,7 +108,6 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
-        // Database se data load karna
         db.ref('profile').on('value', (snap) => {
             const data = snap.val();
             if(data) {
@@ -95,5 +120,5 @@
         });
     </script>
 </body>
-  </html>
-  
+    </html>
+    
