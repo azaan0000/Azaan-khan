@@ -16,6 +16,7 @@
         .blink-red { background: #ff0000; box-shadow: 0 0 10px #ff0000; }
         .blink-blue { background: #1877f2; box-shadow: 0 0 10px #1877f2; }
         @keyframes pulse { 0% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(1.2); } 100% { opacity: 1; transform: scale(1); } }
+        iframe { background: #000; }
     </style>
 </head>
 <body class="bg-slate-950 text-white font-sans scroll-smooth">
@@ -44,7 +45,7 @@
     <div class="max-w-3xl mx-auto px-6 py-12 text-center">
         <header class="mb-12">
             <div class="relative inline-block mb-4">
-                <img id="user-pic" src="https://via.placeholder.com/150" class="w-32 h-32 rounded-full border-4 border-sky-500 shadow-2xl object-cover">
+                <img id="user-pic" src="https://via.placeholder.com/150" class="w-32 h-32 rounded-full border-4 border-sky-500 shadow-2xl object-cover bg-slate-800">
                 <div class="absolute bottom-2 right-2 w-6 h-6 bg-green-500 border-4 border-slate-950 rounded-full"></div>
             </div>
             <h1 class="text-5xl font-black mb-1 italic uppercase tracking-tighter">Azaan Khan</h1>
@@ -64,7 +65,6 @@
         </div>
 
         <div class="space-y-12">
-            
             <section class="text-left">
                 <h2 class="text-xs font-bold mb-4 flex items-center text-gray-400 uppercase tracking-[0.2em] px-2">
                     <span class="blink blink-red"></span> Latest on YouTube
@@ -92,13 +92,13 @@
                 </h2>
                 <div class="glass-card p-6 rounded-[2.5rem] shadow-2xl border-t-4 border-blue-600">
                     <div class="flex items-center mb-4">
-                        <img id="fb-pic" src="https://via.placeholder.com/50" class="w-10 h-10 rounded-full border border-blue-600 mr-3">
+                        <img id="fb-pic" src="https://via.placeholder.com/50" class="w-10 h-10 rounded-full border border-blue-600 mr-3 object-cover">
                         <div>
                             <p class="font-black text-sm uppercase">Azaan Khan Official</p>
                             <p class="text-[9px] text-gray-500 uppercase tracking-widest">Posted just now</p>
                         </div>
                     </div>
-                    <p id="fb-text" class="text-sm text-gray-300 leading-relaxed italic mb-4">Click below to view my latest Facebook posts and stay updated with my daily journey!</p>
+                    <p id="fb-text" class="text-sm text-gray-300 leading-relaxed italic mb-4 font-medium">Click below to view my latest Facebook posts and stay updated with my daily journey!</p>
                     <a href="https://www.facebook.com/profile.php?id=61573210411333" target="_blank" class="block w-full py-3 bg-blue-600/10 border border-blue-600/20 text-blue-500 text-center rounded-xl text-[10px] font-bold uppercase tracking-widest hover:bg-blue-600 hover:text-white transition">Visit Facebook Profile</a>
                 </div>
             </section>
@@ -114,6 +114,7 @@
         function openYTModal() { document.getElementById('yt-modal').classList.add('active'); }
         function closeYTModal() { document.getElementById('yt-modal').classList.remove('active'); }
 
+        // Firebase Configuration
         const firebaseConfig = { 
             apiKey: "AIzaSyC1H9oxa0ZI7vbXDPGxvmHdwT0WrqDC92s", 
             databaseURL: "https://azaan-web-default-rtdb.firebaseio.com", 
@@ -122,18 +123,34 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
+        // Database se data load karne ka sahi tarika
         db.ref('profile').on('value', (snap) => {
             const data = snap.val();
             if(data) {
-                if(data.picUrl) {
+                // Profile & Facebook Pic Load (Only if pic exists)
+                if(data.picUrl && data.picUrl.trim() !== "") {
                     document.getElementById('user-pic').src = data.picUrl;
                     document.getElementById('fb-pic').src = data.picUrl;
                 }
-                // Admin se ye fields update honge to website foran badal jaye gi
-                if(data.latestYT) document.getElementById('yt-video').src = "https://www.youtube.com/embed/" + data.latestYT;
-                if(data.fbUpdateText) document.getElementById('fb-text').innerText = data.fbUpdateText;
+                
+                // YouTube Video Update
+                if(data.latestYT && data.latestYT.trim() !== "") {
+                    const currentSrc = document.getElementById('yt-video').src;
+                    const newSrc = "https://www.youtube.com/embed/" + data.latestYT;
+                    if(currentSrc !== newSrc) {
+                        document.getElementById('yt-video').src = newSrc;
+                    }
+                }
+                
+                // Facebook Text Update
+                if(data.fbUpdateText && data.fbUpdateText.trim() !== "") {
+                    document.getElementById('fb-text').innerText = data.fbUpdateText;
+                }
             }
+        }, (error) => {
+            console.error("Firebase Error: ", error);
         });
     </script>
 </body>
-</html>
+        </html>
+        
