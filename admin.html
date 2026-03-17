@@ -24,11 +24,11 @@
     </div>
 
     <div id="admin-panel" class="max-w-md w-full glass p-8 rounded-[2.5rem] shadow-2xl hidden text-center">
-        <h1 class="text-2xl font-black italic uppercase text-sky-500 mb-6 underline decoration-sky-500/30">Control Panel</h1>
+        <h1 class="text-2xl font-black italic uppercase text-sky-500 mb-6">Control Panel</h1>
 
         <div class="mb-8 group">
             <p class="text-[9px] font-black uppercase tracking-widest text-gray-500 mb-3">Tap Circle to Select New Photo</p>
-            <input type="file" id="fileInput" accept="image/*" class="hidden" onchange="previewImage(this)">
+            <input type="file" id="fileInput" accept="image/*" class="hidden" onchange="processImage(this)">
             <div class="relative inline-block">
                 <img id="imgPreview" src="https://via.placeholder.com/150" class="preview-img" onclick="document.getElementById('fileInput').click()">
                 <div class="absolute inset-0 rounded-full bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition pointer-events-none">
@@ -41,7 +41,7 @@
         <div class="space-y-5 text-left">
             <div>
                 <label class="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-2">YouTube Video ID</label>
-                <input type="text" id="latestYT" class="w-full bg-black/30 border border-white/10 p-4 rounded-2xl text-sm mt-1 outline-none focus:border-red-500">
+                <input type="text" id="latestYT" placeholder="Example: UGWXAN8p73w" class="w-full bg-black/30 border border-white/10 p-4 rounded-2xl text-sm mt-1 outline-none focus:border-red-500">
             </div>
 
             <div>
@@ -49,12 +49,13 @@
                 <textarea id="fbUpdateText" rows="2" class="w-full bg-black/30 border border-white/10 p-4 rounded-2xl text-sm mt-1 outline-none focus:border-blue-500 resize-none"></textarea>
             </div>
 
-            <button onclick="updateData()" id="updateBtn" class="w-full bg-sky-600 py-4 rounded-2xl font-black uppercase text-xs tracking-[0.2em] shadow-lg shadow-sky-600/30 transition active:scale-95">Update Website</button>
+            <button onclick="updateData()" id="updateBtn" class="w-full bg-sky-600 py-4 rounded-2xl font-black uppercase text-xs tracking-[0.2em] shadow-lg shadow-sky-600/30 transition active:scale-95">Save Everything</button>
             <div id="status" class="text-[10px] font-bold uppercase tracking-widest hidden mt-4"></div>
         </div>
     </div>
 
     <script>
+        // Firebase Configuration
         const firebaseConfig = { 
             apiKey: "AIzaSyC1H9oxa0ZI7vbXDPGxvmHdwT0WrqDC92s", 
             databaseURL: "https://azaan-web-default-rtdb.firebaseio.com", 
@@ -71,12 +72,24 @@
             }
         }
 
-        function previewImage(input) {
+        function processImage(input) {
             if (input.files && input.files[0]) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    document.getElementById('imgPreview').src = e.target.result;
-                    document.getElementById('picUrlStore').value = e.target.result;
+                    const img = new Image();
+                    img.src = e.target.result;
+                    img.onload = function() {
+                        const canvas = document.createElement('canvas');
+                        const MAX_WIDTH = 300; // Database loading issue fix karne ke liye
+                        const scaleSize = MAX_WIDTH / img.width;
+                        canvas.width = MAX_WIDTH;
+                        canvas.height = img.height * scaleSize;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                        const compressedBase64 = canvas.toDataURL('image/jpeg', 0.6); // Quality 60% taake smooth chale
+                        document.getElementById('imgPreview').src = compressedBase64;
+                        document.getElementById('picUrlStore').value = compressedBase64;
+                    };
                 };
                 reader.readAsDataURL(input.files[0]);
             }
@@ -86,7 +99,6 @@
             db.ref('profile').on('value', (snapshot) => {
                 const data = snapshot.val();
                 if(data) {
-                    // Agar database mein purani pic hai to wo preview mein show hogi
                     if(data.picUrl) {
                         document.getElementById('imgPreview').src = data.picUrl;
                         document.getElementById('picUrlStore').value = data.picUrl;
@@ -100,30 +112,22 @@
         function updateData() {
             const btn = document.getElementById('updateBtn');
             const status = document.getElementById('status');
-            
             const newData = {
                 picUrl: document.getElementById('picUrlStore').value,
                 latestYT: document.getElementById('latestYT').value,
                 fbUpdateText: document.getElementById('fbUpdateText').value
             };
 
-            btn.innerText = "UPDATING...";
+            btn.innerText = "SAVING...";
             btn.disabled = true;
 
             db.ref('profile').update(newData).then(() => {
-                btn.innerText = "UPDATE WEBSITE";
+                btn.innerText = "SAVE EVERYTHING";
                 btn.disabled = false;
-                status.innerText = "SUCCESSFULLY UPDATED!";
+                status.innerText = "UPDATED SUCCESSFULLY!";
                 status.className = "text-center text-[10px] font-bold uppercase text-green-500 mt-4";
                 status.classList.remove('hidden');
-                
-                // Clear file input taake dobara select kiya ja sake
-                document.getElementById('fileInput').value = "";
-                
                 setTimeout(() => status.classList.add('hidden'), 3000);
-            }).catch(e => {
-                btn.innerText = "ERROR!";
-                btn.disabled = false;
             });
         }
     </script>
