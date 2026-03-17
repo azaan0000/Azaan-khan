@@ -11,51 +11,50 @@
     <style>
         body { background-color: #020617; }
         .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        .preview-img { width: 120px; height: 120px; object-fit: cover; border-radius: 50%; border: 3px solid #0ea5e9; margin: 0 auto; cursor: pointer; transition: 0.3s; }
+        .preview-img:hover { filter: brightness(1.2); transform: scale(1.05); }
     </style>
 </head>
 <body class="text-white min-h-screen flex items-center justify-center p-6">
 
-    <div class="max-w-md w-full glass p-8 rounded-[2.5rem] shadow-2xl">
-        <div class="text-center mb-8">
-            <h1 class="text-3xl font-black italic tracking-tighter uppercase text-sky-500">Admin Panel</h1>
-            <p class="text-[10px] text-gray-500 font-bold uppercase tracking-widest mt-1">Control your Hub in Real-time</p>
+    <div id="login-section" class="max-w-md w-full glass p-8 rounded-[2.5rem] shadow-2xl text-center">
+        <h2 class="text-2xl font-black uppercase italic mb-6">Admin Login</h2>
+        <input type="password" id="admin-pass" placeholder="Enter Password" class="w-full bg-black/40 p-4 rounded-2xl border border-white/10 mb-4 outline-none focus:border-sky-500 text-center">
+        <button onclick="checkPass()" class="w-full bg-sky-600 py-4 rounded-2xl font-black uppercase text-xs tracking-widest hover:bg-sky-500 transition">Login</button>
+    </div>
+
+    <div id="admin-panel" class="max-w-md w-full glass p-8 rounded-[2.5rem] shadow-2xl hidden text-center">
+        <h1 class="text-2xl font-black italic uppercase text-sky-500 mb-6 underline decoration-sky-500/30">Control Panel</h1>
+
+        <div class="mb-8 group">
+            <p class="text-[9px] font-black uppercase tracking-widest text-gray-500 mb-3">Tap Circle to Select New Photo</p>
+            <input type="file" id="fileInput" accept="image/*" class="hidden" onchange="previewImage(this)">
+            <div class="relative inline-block">
+                <img id="imgPreview" src="https://via.placeholder.com/150" class="preview-img" onclick="document.getElementById('fileInput').click()">
+                <div class="absolute inset-0 rounded-full bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition pointer-events-none">
+                    <i class="fas fa-camera text-2xl"></i>
+                </div>
+            </div>
+            <input type="hidden" id="picUrlStore">
         </div>
 
-        <div class="space-y-6">
+        <div class="space-y-5 text-left">
             <div>
-                <label class="block text-[10px] font-black uppercase tracking-widest text-gray-400 mb-2 px-2">Profile Image URL</label>
-                <input type="text" id="picUrl" placeholder="Paste image link here..." 
-                    class="w-full bg-slate-900/50 border border-white/10 p-4 rounded-2xl text-sm focus:border-sky-500 outline-none transition">
+                <label class="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-2">YouTube Video ID</label>
+                <input type="text" id="latestYT" class="w-full bg-black/30 border border-white/10 p-4 rounded-2xl text-sm mt-1 outline-none focus:border-red-500">
             </div>
 
             <div>
-                <label class="block text-[10px] font-black uppercase tracking-widest text-gray-400 mb-2 px-2">Latest YouTube Video ID</label>
-                <input type="text" id="latestYT" placeholder="Example: UGWXAN8p73w" 
-                    class="w-full bg-slate-900/50 border border-white/10 p-4 rounded-2xl text-sm focus:border-red-500 outline-none transition">
-                <p class="text-[9px] text-gray-600 mt-2 px-2 italic uppercase font-bold">* Just the code after v= in the link</p>
+                <label class="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-2">Facebook Text</label>
+                <textarea id="fbUpdateText" rows="2" class="w-full bg-black/30 border border-white/10 p-4 rounded-2xl text-sm mt-1 outline-none focus:border-blue-500 resize-none"></textarea>
             </div>
 
-            <div>
-                <label class="block text-[10px] font-black uppercase tracking-widest text-gray-400 mb-2 px-2">Facebook Card Text</label>
-                <textarea id="fbUpdateText" rows="3" placeholder="What's on your mind?" 
-                    class="w-full bg-slate-900/50 border border-white/10 p-4 rounded-2xl text-sm focus:border-blue-500 outline-none transition resize-none"></textarea>
-            </div>
-
-            <button onclick="updateData()" id="updateBtn" 
-                class="w-full bg-sky-600 hover:bg-sky-500 py-4 rounded-2xl font-black uppercase text-xs tracking-[0.2em] shadow-lg shadow-sky-600/20 transition-all active:scale-95">
-                Update Website
-            </button>
-
-            <div id="status" class="text-center text-[10px] font-bold uppercase tracking-widest hidden italic"></div>
+            <button onclick="updateData()" id="updateBtn" class="w-full bg-sky-600 py-4 rounded-2xl font-black uppercase text-xs tracking-[0.2em] shadow-lg shadow-sky-600/30 transition active:scale-95">Update Website</button>
+            <div id="status" class="text-[10px] font-bold uppercase tracking-widest hidden mt-4"></div>
         </div>
-
-        <footer class="mt-8 text-center text-[9px] text-gray-700 font-bold uppercase tracking-widest">
-            Azaan Khan Official &copy; 2026
-        </footer>
     </div>
 
     <script>
-        // Aapka Firebase Config
         const firebaseConfig = { 
             apiKey: "AIzaSyC1H9oxa0ZI7vbXDPGxvmHdwT0WrqDC92s", 
             databaseURL: "https://azaan-web-default-rtdb.firebaseio.com", 
@@ -64,48 +63,68 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
-        // Pehle se mujood data load karna
-        db.ref('profile').on('value', (snapshot) => {
-            const data = snapshot.val();
-            if(data) {
-                if(data.picUrl) document.getElementById('picUrl').value = data.picUrl;
-                if(data.latestYT) document.getElementById('latestYT').value = data.latestYT;
-                if(data.fbUpdateText) document.getElementById('fbUpdateText').value = data.fbUpdateText;
+        function checkPass() {
+            if(document.getElementById('admin-pass').value === "azaan786") {
+                document.getElementById('login-section').classList.add('hidden');
+                document.getElementById('admin-panel').classList.remove('hidden');
+                loadCurrentData();
             }
-        });
+        }
 
-        // Data Update karne ka function
+        function previewImage(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('imgPreview').src = e.target.result;
+                    document.getElementById('picUrlStore').value = e.target.result;
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        function loadCurrentData() {
+            db.ref('profile').on('value', (snapshot) => {
+                const data = snapshot.val();
+                if(data) {
+                    // Agar database mein purani pic hai to wo preview mein show hogi
+                    if(data.picUrl) {
+                        document.getElementById('imgPreview').src = data.picUrl;
+                        document.getElementById('picUrlStore').value = data.picUrl;
+                    }
+                    if(data.latestYT) document.getElementById('latestYT').value = data.latestYT;
+                    if(data.fbUpdateText) document.getElementById('fbUpdateText').value = data.fbUpdateText;
+                }
+            });
+        }
+
         function updateData() {
             const btn = document.getElementById('updateBtn');
             const status = document.getElementById('status');
             
             const newData = {
-                picUrl: document.getElementById('picUrl').value,
+                picUrl: document.getElementById('picUrlStore').value,
                 latestYT: document.getElementById('latestYT').value,
                 fbUpdateText: document.getElementById('fbUpdateText').value
             };
 
-            btn.innerText = "Updating...";
+            btn.innerText = "UPDATING...";
             btn.disabled = true;
 
-            db.ref('profile').update(newData)
-                .then(() => {
-                    btn.innerText = "Update Website";
-                    btn.disabled = false;
-                    status.innerText = "Website Updated Successfully!";
-                    status.classList.remove('hidden', 'text-red-500');
-                    status.classList.add('text-green-500');
-                    
-                    setTimeout(() => status.classList.add('hidden'), 3000);
-                })
-                .catch((error) => {
-                    console.error(error);
-                    btn.innerText = "Update Website";
-                    btn.disabled = false;
-                    status.innerText = "Error: Update Failed";
-                    status.classList.remove('hidden', 'text-green-500');
-                    status.classList.add('text-red-500');
-                });
+            db.ref('profile').update(newData).then(() => {
+                btn.innerText = "UPDATE WEBSITE";
+                btn.disabled = false;
+                status.innerText = "SUCCESSFULLY UPDATED!";
+                status.className = "text-center text-[10px] font-bold uppercase text-green-500 mt-4";
+                status.classList.remove('hidden');
+                
+                // Clear file input taake dobara select kiya ja sake
+                document.getElementById('fileInput').value = "";
+                
+                setTimeout(() => status.classList.add('hidden'), 3000);
+            }).catch(e => {
+                btn.innerText = "ERROR!";
+                btn.disabled = false;
+            });
         }
     </script>
 </body>
