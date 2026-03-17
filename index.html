@@ -10,64 +10,90 @@
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
     <style>
         .glass-card { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); backdrop-filter: blur(20px); z-index: 1000; align-items: center; justify-content: center; }
+        .modal.active { display: flex; }
     </style>
 </head>
 <body class="bg-slate-950 text-white font-sans scroll-smooth">
 
+    <div id="fb-root"></div>
+    <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v17.0"></script>
+
+    <div id="yt-modal" class="modal px-6" onclick="closeYTModal()">
+        <div class="glass-card p-8 rounded-[2.5rem] w-full max-w-sm text-center border-red-500/30 shadow-2xl" onclick="event.stopPropagation()">
+            <h3 class="text-xl font-bold mb-6 text-red-500 tracking-widest uppercase">Select Channel</h3>
+            <div class="space-y-4">
+                <a href="https://youtube.com/@theislamicpathazn" target="_blank" class="block p-5 rounded-2xl bg-white/5 border border-white/10 hover:border-red-600 transition group">
+                    <i class="fab fa-youtube text-red-600 text-3xl mb-2"></i>
+                    <p class="font-bold uppercase tracking-widest">The Islamic Path</p>
+                </a>
+                <a href="https://youtube.com/@aznvision-d9g" target="_blank" class="block p-5 rounded-2xl bg-white/5 border border-white/10 hover:border-red-600 transition group">
+                    <i class="fab fa-youtube text-red-600 text-3xl mb-2"></i>
+                    <p class="font-bold uppercase tracking-widest">Azn Vision</p>
+                </a>
+                <button onclick="closeYTModal()" class="mt-4 text-[10px] text-gray-500 uppercase font-bold tracking-widest">Close</button>
+            </div>
+        </div>
+    </div>
+
     <a href="https://wa.me/923705840165" target="_blank" class="fixed bottom-6 right-6 bg-[#25D366] w-14 h-14 rounded-full flex items-center justify-center text-2xl shadow-2xl z-50 hover:scale-110 transition">
-        <i class="fab fa-whatsapp"></i>
+        <i class="fab fa-whatsapp text-white"></i>
     </a>
 
     <div class="max-w-3xl mx-auto px-6 py-12 text-center">
         <header class="mb-12">
             <div class="relative inline-block">
-                <img id="user-pic" src="https://via.placeholder.com/150" class="w-32 h-32 rounded-full mx-auto border-4 border-sky-500 shadow-2xl object-cover mb-4 bg-slate-800">
+                <img id="user-pic" src="https://via.placeholder.com/150" class="w-32 h-32 rounded-full mx-auto border-4 border-sky-500 shadow-2xl object-cover mb-4">
                 <div class="absolute bottom-4 right-2 w-6 h-6 bg-green-500 border-4 border-slate-950 rounded-full"></div>
             </div>
-            <h1 class="text-5xl font-extrabold mb-2 tracking-tight">Azaan Khan</h1>
-            <p class="text-sky-400 uppercase tracking-[0.3em] text-[10px] font-bold">Digital Content Creator</p>
+            <h1 class="text-5xl font-extrabold mb-1 tracking-tight italic uppercase">Azaan Khan</h1>
+            <p class="text-sky-400 uppercase tracking-[0.3em] text-[10px] font-bold mb-4">Content Creator & Developer</p>
+            
+            <div class="flex flex-col items-center space-y-2 text-[11px] text-gray-400 font-medium">
+                <a href="mailto:azaanbk29@gmail.com" class="hover:text-sky-400 transition italic"><i class="far fa-envelope mr-2"></i>azaanbk29@gmail.com</a>
+                <a href="tel:+923705840165" class="hover:text-sky-400 transition italic"><i class="fas fa-phone-alt mr-2"></i>+92 370 5840165</a>
+            </div>
         </header>
 
         <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-12">
-            <a href="https://youtube.com/@theislamicpathazn" target="_blank" class="glass-card p-4 rounded-2xl hover:bg-red-600/20 transition group">
+            <button onclick="openYTModal()" class="glass-card p-4 rounded-2xl hover:bg-red-600/20 transition group">
                 <i class="fab fa-youtube text-red-500 text-2xl mb-1"></i>
-                <p class="text-[10px] font-bold">YOUTUBE</p>
-            </a>
+                <p class="text-[10px] font-bold uppercase tracking-widest">YouTube</p>
+            </button>
             <a href="https://www.tiktok.com/@aaazaan0" target="_blank" class="glass-card p-4 rounded-2xl hover:bg-white/10 transition">
                 <i class="fab fa-tiktok text-white text-2xl mb-1"></i>
-                <p class="text-[10px] font-bold">TIKTOK</p>
+                <p class="text-[10px] font-bold uppercase tracking-widest">TikTok</p>
             </a>
             <a href="https://www.snapchat.com/add/aaazaan786" target="_blank" class="glass-card p-4 rounded-2xl hover:bg-yellow-400/20 transition">
                 <i class="fab fa-snapchat text-yellow-400 text-2xl mb-1"></i>
-                <p class="text-[10px] font-bold">SNAPCHAT</p>
+                <p class="text-[10px] font-bold uppercase tracking-widest">Snapchat</p>
             </a>
-            <a href="https://www.facebook.com/share/18PvuAgBZx/" target="_blank" class="glass-card p-4 rounded-2xl hover:bg-blue-600/20 transition">
+            <a href="https://www.facebook.com/profile.php?id=61573210411333" target="_blank" class="glass-card p-4 rounded-2xl hover:bg-blue-600/20 transition">
                 <i class="fab fa-facebook-f text-blue-500 text-2xl mb-1"></i>
-                <p class="text-[10px] font-bold">FACEBOOK</p>
+                <p class="text-[10px] font-bold uppercase tracking-widest">Facebook</p>
             </a>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-12 text-left">
             <div class="glass-card p-6 rounded-3xl border-l-4 border-yellow-500">
                 <span class="text-[10px] font-bold text-yellow-500 uppercase tracking-widest">Free Fire</span>
-                <p id="ff-name" class="text-xl font-black mt-1 uppercase">AAA々DANGER</p>
-                <p id="ff-id" class="text-xs text-gray-500 font-mono">ID: 13085487301</p>
+                <p id="ff-name" class="text-xl font-black mt-1 uppercase italic">AAA々DANGER</p>
+                <p id="ff-id" class="text-xs text-gray-500 font-mono italic">ID: 13085487301</p>
             </div>
             <div class="glass-card p-6 rounded-3xl border-l-4 border-orange-500">
                 <span class="text-[10px] font-bold text-orange-500 uppercase tracking-widest">PUBG Mobile</span>
-                <p id="pubg-name" class="text-xl font-black mt-1 uppercase">"AAA"</p>
-                <p id="pubg-id" class="text-xs text-gray-500 font-mono">ID: 52183640460</p>
+                <p id="pubg-name" class="text-xl font-black mt-1 uppercase italic">"AAA"</p>
+                <p id="pubg-id" class="text-xs text-gray-500 font-mono italic">ID: 52183640460</p>
             </div>
         </div>
 
         <div class="space-y-12">
-            
             <section class="text-left">
                 <h2 class="text-xs font-bold mb-4 flex items-center text-gray-400 uppercase tracking-widest px-2">
                     <i class="fab fa-youtube text-red-600 mr-2 text-lg"></i> YouTube Latest
                 </h2>
-                <div class="rounded-3xl overflow-hidden border border-white/10 shadow-2xl bg-black aspect-video">
-                    <iframe class="w-full h-full" src="https://www.youtube.com/embed?listType=user_uploads&list=theislamicpathazn" frameborder="0" allowfullscreen></iframe>
+                <div class="rounded-3xl overflow-hidden shadow-2xl bg-black aspect-video border border-white/10">
+                    <iframe class="w-full h-full" src="https://www.youtube.com/embed?listType=user_uploads&list=aznvision-d9g" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                 </div>
             </section>
 
@@ -76,7 +102,7 @@
                     <i class="fab fa-tiktok text-white mr-2 text-lg"></i> TikTok Highlights
                 </h2>
                 <div class="glass-card p-4 rounded-3xl overflow-hidden shadow-2xl">
-                    <blockquote class="tiktok-embed" cite="https://www.tiktok.com/@aaazaan0" data-unique-id="aaazaan0" data-embed-type="creator" style="max-width: 100%; min-width: 288px;">
+                    <blockquote class="tiktok-embed" cite="https://www.tiktok.com/@aaazaan0" data-unique-id="aaazaan0" data-embed-type="creator" style="max-width: 100%;">
                         <section><a target="_blank" href="https://www.tiktok.com/@aaazaan0?refer=embed">@aaazaan0</a></section>
                     </blockquote>
                     <script async src="https://www.tiktok.com/embed.js"></script>
@@ -87,19 +113,30 @@
                 <h2 class="text-xs font-bold mb-4 flex items-center text-gray-400 uppercase tracking-widest px-2">
                     <i class="fab fa-facebook text-blue-500 mr-2 text-lg"></i> Facebook Updates
                 </h2>
-                <div class="glass-card rounded-3xl overflow-hidden shadow-2xl bg-white/5">
-                    <iframe src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2Fshare%2F18PvuAgBZx%2F&tabs=timeline&width=500&height=500&small_header=true&adapt_container_width=true&hide_cover=false&show_facepile=true" width="100%" height="450" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
+                <div class="glass-card rounded-3xl overflow-hidden shadow-2xl bg-white/5 flex justify-center min-h-[500px]">
+                    <div class="fb-page" 
+                        data-href="https://www.facebook.com/profile.php?id=61573210411333" 
+                        data-tabs="timeline" 
+                        data-width="500" 
+                        data-height="500" 
+                        data-small-header="false" 
+                        data-adapt-container-width="true" 
+                        data-hide-cover="false" 
+                        data-show-facepile="true">
+                    </div>
                 </div>
             </section>
-
         </div>
 
-        <footer class="mt-20 text-[9px] text-gray-600 tracking-[0.5em] font-bold uppercase">
+        <footer class="mt-20 text-[9px] text-gray-700 tracking-[0.5em] font-bold uppercase italic">
             &copy; 2026 AZAAN KHAN OFFICIAL
         </footer>
     </div>
 
     <script>
+        function openYTModal() { document.getElementById('yt-modal').classList.add('active'); }
+        function closeYTModal() { document.getElementById('yt-modal').classList.remove('active'); }
+
         const firebaseConfig = { 
             apiKey: "AIzaSyC1H9oxa0ZI7vbXDPGxvmHdwT0WrqDC92s", 
             databaseURL: "https://azaan-web-default-rtdb.firebaseio.com", 
@@ -118,7 +155,10 @@
                 if(data.pubgId) document.getElementById('pubg-id').innerText = "ID: " + data.pubgId;
             }
         });
+
+        // Forced refresh for Facebook SDK
+        window.fbAsyncInit = function() { FB.XFBML.parse(); };
     </script>
 </body>
-    </html>
-    
+                    </html>
+                    
