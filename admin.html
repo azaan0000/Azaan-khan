@@ -3,56 +3,75 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Azaan Khan | Admin Control</title>
+    <title>Azaan | VIP Admin Control</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
     <style>
-        body { background-color: #020617; }
-        .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.1); }
-        .preview-img { width: 120px; height: 120px; object-fit: cover; border-radius: 50%; border: 3px solid #0ea5e9; margin: 0 auto; cursor: pointer; }
-        input, textarea { background: rgba(0,0,0,0.4) !important; color: white !important; }
+        body { background: #020617; font-family: sans-serif; }
+        .admin-card { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        input { background: rgba(0,0,0,0.3) !important; border: 1px solid rgba(255,255,255,0.1) !important; color: white !important; transition: 0.3s; }
+        input:focus { border-color: #0ea5e9 !important; outline: none; box-shadow: 0 0 10px rgba(14, 165, 233, 0.2); }
     </style>
 </head>
-<body class="text-white min-h-screen flex items-center justify-center p-6">
+<body class="text-slate-200 min-h-screen p-6">
 
-    <div id="login-section" class="max-w-md w-full glass p-8 rounded-[2.5rem] text-center shadow-2xl">
-        <h2 class="text-2xl font-black uppercase italic mb-6">Admin Login</h2>
-        <input type="password" id="admin-pass" placeholder="Password: azaan786" class="w-full p-4 rounded-2xl border border-white/10 mb-4 outline-none focus:border-sky-500 text-center">
-        <button onclick="checkPass()" class="w-full bg-sky-600 py-4 rounded-2xl font-black uppercase text-xs tracking-widest hover:bg-sky-500 transition">Login</button>
-    </div>
+    <div class="max-w-xl mx-auto">
+        <header class="text-center mb-10">
+            <h1 class="text-3xl font-black uppercase italic tracking-tighter text-sky-500">Master Control</h1>
+            <p class="text-[10px] text-slate-500 uppercase tracking-[0.4em] font-bold">Azaan Khan Official Hub</p>
+        </header>
 
-    <div id="admin-panel" class="max-w-md w-full glass p-8 rounded-[2.5rem] shadow-2xl hidden text-center">
-        <h1 class="text-2xl font-black italic uppercase text-sky-500 mb-6">Control Panel</h1>
-
-        <div class="mb-8">
-            <p class="text-[9px] font-black uppercase tracking-widest text-gray-500 mb-3">Tap Circle to Change Photo</p>
-            <input type="file" id="fileInput" accept="image/*" class="hidden" onchange="processImage(this)">
-            <img id="imgPreview" src="https://via.placeholder.com/150" class="preview-img shadow-lg" onclick="document.getElementById('fileInput').click()">
-            <input type="hidden" id="picUrlStore">
+        <div class="admin-card p-6 rounded-[2rem] mb-6">
+            <h2 class="text-xs font-black uppercase tracking-widest text-slate-400 mb-4 flex items-center">
+                <i class="fas fa-user-circle mr-2 text-sky-500"></i> Profile Image
+            </h2>
+            <input type="text" id="pic-url" placeholder="Paste direct image link here..." class="w-full p-4 rounded-2xl text-sm">
+            <button onclick="updatePic()" class="w-full mt-4 bg-sky-600 hover:bg-sky-500 text-white font-black py-3 rounded-xl uppercase text-[10px] tracking-widest transition">Update DP</button>
         </div>
 
-        <div class="space-y-4 text-left">
-            <div>
-                <label class="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-2">YouTube Video ID</label>
-                <input type="text" id="latestYT" class="w-full border border-white/10 p-4 rounded-2xl text-sm mt-1 outline-none focus:border-red-500">
+        <div class="admin-card p-6 rounded-[2rem] mb-6">
+            <h2 class="text-xs font-black uppercase tracking-widest text-slate-400 mb-4 flex items-center">
+                <i class="fas fa-chart-line mr-2 text-sky-500"></i> Social Stats
+            </h2>
+            <div class="grid grid-cols-2 gap-4 mb-4">
+                <div>
+                    <label class="text-[9px] font-bold uppercase text-slate-500 ml-2">FB Likes</label>
+                    <input type="text" id="fb-likes" placeholder="e.g. 10K" class="w-full p-4 rounded-2xl text-sm mt-1">
+                </div>
+                <div>
+                    <label class="text-[9px] font-bold uppercase text-slate-500 ml-2">FB Followers</label>
+                    <input type="text" id="fb-follows" placeholder="e.g. 15K" class="w-full p-4 rounded-2xl text-sm mt-1">
+                </div>
             </div>
-
-            <div>
-                <label class="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-2">Facebook Text</label>
-                <textarea id="fbUpdateText" rows="2" class="w-full border border-white/10 p-4 rounded-2xl text-sm mt-1 outline-none focus:border-blue-500 resize-none"></textarea>
-            </div>
-
-            <button onclick="updateData()" id="updateBtn" class="w-full bg-sky-600 py-4 rounded-2xl font-black uppercase text-xs tracking-widest shadow-lg shadow-sky-600/30 transition active:scale-95">Save Changes</button>
-            
-            <button onclick="resetDatabase()" class="w-full bg-red-600/10 border border-red-600/30 py-3 rounded-2xl font-bold uppercase text-[9px] tracking-[0.2em] text-red-500 hover:bg-red-600 hover:text-white transition">Reset Database (Fix Error)</button>
-            
-            <div id="status" class="text-center text-[10px] font-bold uppercase tracking-widest hidden mt-4"></div>
+            <label class="text-[9px] font-bold uppercase text-slate-500 ml-2">Snapchat Friends</label>
+            <input type="text" id="sc-friends" placeholder="e.g. 500+" class="w-full p-4 rounded-2xl text-sm mt-1">
+            <button onclick="updateStats()" class="w-full mt-6 bg-blue-600 hover:bg-blue-500 text-white font-black py-4 rounded-xl uppercase text-[10px] tracking-widest transition shadow-lg shadow-blue-900/20">Save Social Stats</button>
         </div>
+
+        <div class="admin-card p-6 rounded-[2rem] mb-10">
+            <h2 class="text-xs font-black uppercase tracking-widest text-slate-400 mb-4 flex items-center">
+                <i class="fas fa-gamepad mr-2 text-sky-500"></i> Gaming IDs
+            </h2>
+            <div class="space-y-4">
+                <div>
+                    <label class="text-[9px] font-bold uppercase text-slate-500 ml-2">PUBG Mobile ID</label>
+                    <input type="text" id="pubg-id" placeholder="Enter ID..." class="w-full p-4 rounded-2xl text-sm mt-1">
+                </div>
+                <div>
+                    <label class="text-[9px] font-bold uppercase text-slate-500 ml-2">Free Fire ID</label>
+                    <input type="text" id="ff-id" placeholder="Enter ID..." class="w-full p-4 rounded-2xl text-sm mt-1">
+                </div>
+            </div>
+            <button onclick="updateGaming()" class="w-full mt-6 bg-orange-600 hover:bg-orange-500 text-white font-black py-4 rounded-xl uppercase text-[10px] tracking-widest transition shadow-lg shadow-orange-900/20">Update IDs</button>
+        </div>
+
+        <p class="text-center text-[8px] text-slate-700 uppercase tracking-[0.5em] font-bold">Secured Admin Access</p>
     </div>
 
     <script>
+        // Firebase Config (Matches your main site)
         const firebaseConfig = { 
             apiKey: "AIzaSyC1H9oxa0ZI7vbXDPGxvmHdwT0WrqDC92s", 
             databaseURL: "https://azaan-web-default-rtdb.firebaseio.com", 
@@ -61,78 +80,45 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
-        function checkPass() {
-            if(document.getElementById('admin-pass').value === "azaan786") {
-                document.getElementById('login-section').classList.add('hidden');
-                document.getElementById('admin-panel').classList.remove('hidden');
-                loadData();
+        // 1. Update Profile Pic
+        function updatePic() {
+            const url = document.getElementById('pic-url').value;
+            if(!url) return alert("Please enter a link!");
+            db.ref('profile').update({ picUrl: url })
+              .then(() => alert("Profile Picture Updated!"));
+        }
+
+        // 2. Update Social Stats
+        function updateStats() {
+            db.ref('social_stats').update({
+                fbLikes: document.getElementById('fb-likes').value,
+                fbFollows: document.getElementById('fb-follows').value,
+                scFriends: document.getElementById('sc-friends').value
+            }).then(() => alert("Social Stats Updated Live!"));
+        }
+
+        // 3. Update Gaming IDs
+        function updateGaming() {
+            db.ref('gaming_ids').update({
+                pubg: document.getElementById('pubg-id').value,
+                ff: document.getElementById('ff-id').value
+            }).then(() => alert("Gaming IDs Updated Live!"));
+        }
+
+        // Load current data into inputs
+        db.ref().on('value', (snap) => {
+            const data = snap.val();
+            if(data.social_stats) {
+                document.getElementById('fb-likes').value = data.social_stats.fbLikes || '';
+                document.getElementById('fb-follows').value = data.social_stats.fbFollows || '';
+                document.getElementById('sc-friends').value = data.social_stats.scFriends || '';
             }
-        }
-
-        function processImage(input) {
-            if (input.files && input.files[0]) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const img = new Image();
-                    img.src = e.target.result;
-                    img.onload = function() {
-                        const canvas = document.createElement('canvas');
-                        const MAX_WIDTH = 250; 
-                        const scaleSize = MAX_WIDTH / img.width;
-                        canvas.width = MAX_WIDTH;
-                        canvas.height = img.height * scaleSize;
-                        const ctx = canvas.getContext('2d');
-                        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                        const compressed = canvas.toDataURL('image/jpeg', 0.5); 
-                        document.getElementById('imgPreview').src = compressed;
-                        document.getElementById('picUrlStore').value = compressed;
-                    };
-                };
-                reader.readAsDataURL(input.files[0]);
+            if(data.profile) document.getElementById('pic-url').value = data.profile.picUrl || '';
+            if(data.gaming_ids) {
+                document.getElementById('pubg-id').value = data.gaming_ids.pubg || '';
+                document.getElementById('ff-id').value = data.gaming_ids.ff || '';
             }
-        }
-
-        function loadData() {
-            db.ref('profile').on('value', (snap) => {
-                const data = snap.val();
-                if(data) {
-                    if(data.picUrl) {
-                        document.getElementById('imgPreview').src = data.picUrl;
-                        document.getElementById('picUrlStore').value = data.picUrl;
-                    }
-                    document.getElementById('latestYT').value = data.latestYT || "";
-                    document.getElementById('fbUpdateText').value = data.fbUpdateText || "";
-                }
-            });
-        }
-
-        function updateData() {
-            const btn = document.getElementById('updateBtn');
-            const status = document.getElementById('status');
-            const data = {
-                picUrl: document.getElementById('picUrlStore').value,
-                latestYT: document.getElementById('latestYT').value,
-                fbUpdateText: document.getElementById('fbUpdateText').value
-            };
-            btn.innerText = "SAVING...";
-            db.ref('profile').update(data).then(() => {
-                btn.innerText = "SAVE CHANGES";
-                status.innerText = "WEBSITE UPDATED!";
-                status.className = "text-center text-[10px] font-bold uppercase text-green-500 mt-4";
-                status.classList.remove('hidden');
-                setTimeout(() => status.classList.add('hidden'), 3000);
-            });
-        }
-
-        function resetDatabase() {
-            if(confirm("Purana heavy data delete karein? Isse error theek ho jayega.")) {
-                db.ref('profile').set({
-                    picUrl: "https://via.placeholder.com/150",
-                    latestYT: "UGWXAN8p73w",
-                    fbUpdateText: "Refreshed. Please update now."
-                }).then(() => location.reload());
-            }
-        }
+        });
     </script>
 </body>
 </html>
