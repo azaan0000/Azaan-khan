@@ -16,6 +16,7 @@
         .blink-red { background: #ff0000; box-shadow: 0 0 10px #ff0000; }
         .blink-blue { background: #1877f2; box-shadow: 0 0 10px #1877f2; }
         .blink-orange { background: #ffae00; box-shadow: 0 0 10px #ffae00; }
+        .blink-yellow { background: #FFFC00; box-shadow: 0 0 10px #FFFC00; }
         @keyframes pulse { 0% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(1.2); } 100% { opacity: 1; transform: scale(1); } }
         .gaming-card { background: linear-gradient(145deg, rgba(255,255,255,0.05) 0%, rgba(0,0,0,0.2) 100%); transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); cursor: pointer; border: 1px solid rgba(255,255,255,0.05); }
         .gaming-card:hover { transform: scale(1.02); border-color: rgba(255,174,0,0.5); }
@@ -54,7 +55,7 @@
             <p class="text-sky-400 uppercase tracking-[0.4em] text-[10px] font-bold mb-4">Digital Creator</p>
             
             <div class="flex flex-col items-center space-y-2 mb-8">
-                <div class="flex items-center space-x-3 text-[11px] font-bold lowercase tracking-widest text-gray-400 glass-card px-4 py-2 rounded-full border-white/5">
+                <div class="flex items-center space-x-3 text-[11px] font-bold tracking-widest text-gray-400 glass-card px-4 py-2 rounded-full border-white/5 lowercase">
                     <i class="fas fa-envelope text-sky-500"></i>
                     <span>azaanbk29@gmail.com</span>
                 </div>
@@ -107,6 +108,20 @@
                 </h2>
                 <div class="rounded-[2.5rem] overflow-hidden shadow-2xl bg-black aspect-video border border-white/10">
                     <iframe id="yt-video" class="w-full h-full" src="https://www.youtube.com/embed/UGWXAN8p73w" frameborder="0" allowfullscreen></iframe>
+                </div>
+            </section>
+
+            <section class="text-left">
+                <h2 class="text-xs font-bold mb-4 flex items-center text-gray-400 uppercase tracking-[0.2em] px-2">
+                    <span class="blink blink-yellow"></span> Snapchat Profile
+                </h2>
+                <div class="glass-card p-6 rounded-[2.5rem] shadow-2xl text-center">
+                   <div class="flex flex-col items-center">
+                       <i class="fab fa-snapchat text-yellow-400 text-5xl mb-4"></i>
+                       <h3 class="text-xl font-black tracking-widest uppercase">aaazaan786</h3>
+                       <p class="text-xs text-gray-500 mb-6 tracking-widest">Add me on Snapchat for daily stories!</p>
+                       <a href="https://www.snapchat.com/add/aaazaan786" target="_blank" class="w-full py-3 bg-yellow-400/10 border border-yellow-400/20 text-yellow-400 text-center rounded-xl text-[10px] font-bold uppercase tracking-widest hover:bg-yellow-400 hover:text-black transition">Add Friend on Snapchat</a>
+                   </div>
                 </div>
             </section>
 
@@ -173,5 +188,5 @@
         });
     </script>
 </body>
-    </html>
-    
+                    </html>
+                    
