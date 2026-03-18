@@ -4,10 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Azaan Khan | Official Hub</title>
+    
+    <meta name="google-site-verification" content="TpwPy-eJoNzsNtgvfz-v-bgz_NIv5FlxrEiifBjrs-k" />
+    
+    <meta name="description" content="Azaan Khan Official Hub - Digital Creator and Developer from Rawalpindi. Connect with me on YouTube, TikTok, and Gaming.">
+    <meta name="keywords" content="Azaan Khan, Azaan Khan Official, AZN Vision, Azaan Khan Rawalpindi, Pakistani Digital Creator">
+    <meta name="author" content="Azaan Khan">
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+    
     <style>
         .glass-card { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.1); transition: 0.4s; }
         .glass-card:hover { border-color: rgba(255,255,255,0.3); transform: translateY(-5px); box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
@@ -17,9 +25,21 @@
         @keyframes pulse { 0% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(1.2); } 100% { opacity: 1; transform: scale(1); } }
         .stat-badge { background: rgba(255,255,255,0.05); padding: 4px 12px; border-radius: 99px; font-size: 10px; font-weight: 800; border: 1px solid rgba(255,255,255,0.1); }
         .gaming-gradient { background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.01) 100%); }
+        #yt-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); z-index: 100; align-items: center; justify-content: center; }
     </style>
 </head>
 <body class="bg-slate-950 text-white font-sans scroll-smooth">
+
+    <div id="yt-modal" onclick="closeYT()">
+        <div class="glass-card p-8 rounded-[3rem] w-[90%] max-w-sm border-red-500/20 text-center" onclick="event.stopPropagation()">
+            <h3 class="text-white font-black uppercase italic tracking-tighter text-xl mb-6 text-red-500">Select Channel</h3>
+            <div class="space-y-4">
+                <a href="https://youtube.com/@AZNVision-d9g" target="_blank" class="block w-full py-4 bg-white/5 border border-white/10 rounded-2xl hover:bg-red-600/20 transition font-bold uppercase text-[11px] tracking-widest text-white">AZN Vision</a>
+                <a href="https://youtube.com/@azaankhan-official" target="_blank" class="block w-full py-4 bg-white/5 border border-white/10 rounded-2xl hover:bg-red-600/20 transition font-bold uppercase text-[11px] tracking-widest text-white">Azaan Khan Official</a>
+            </div>
+            <button onclick="closeYT()" class="mt-6 text-[10px] text-gray-500 uppercase font-black tracking-widest">Close</button>
+        </div>
+    </div>
 
     <div class="max-w-3xl mx-auto px-6 py-12 text-center">
         <header class="mb-12">
@@ -43,7 +63,7 @@
         </header>
 
         <div class="grid grid-cols-5 gap-3 mb-12">
-            <a href="https://youtube.com/@AZNVision-d9g" target="_blank" class="glass-card py-4 rounded-2xl hover:bg-red-600/20 transition"><i class="fab fa-youtube text-red-500 text-2xl"></i></a>
+            <button onclick="openYT()" class="glass-card py-4 rounded-2xl hover:bg-red-600/20 transition"><i class="fab fa-youtube text-red-500 text-2xl"></i></button>
             <a href="https://www.tiktok.com/@aaazaan0" target="_blank" class="glass-card py-4 rounded-2xl hover:bg-white/10 transition"><i class="fab fa-tiktok text-white text-2xl"></i></a>
             <a href="https://wa.me/923705840165" target="_blank" class="glass-card py-4 rounded-2xl hover:bg-green-500/20 transition"><i class="fab fa-whatsapp text-green-500 text-2xl"></i></a>
             <a href="https://www.snapchat.com/add/aaazaan786" target="_blank" class="glass-card py-4 rounded-2xl hover:bg-yellow-400/20 transition"><i class="fab fa-snapchat text-yellow-400 text-2xl"></i></a>
@@ -55,7 +75,7 @@
                 <i class="fas fa-gamepad mr-2 text-sky-500"></i> Professional Gaming IDs
             </h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div class="glass-card gaming-gradient p-6 rounded-[2.5rem] border-orange-500/20 flex items-center justify-between group">
+                <div class="glass-card gaming-gradient p-6 rounded-[2.5rem] border-orange-500/20 flex items-center justify-between group transition">
                     <div class="flex items-center space-x-4">
                         <div class="w-14 h-14 rounded-2xl bg-orange-500/10 flex items-center justify-center border border-orange-500/20">
                             <i class="fas fa-crosshairs text-orange-500 text-2xl"></i>
@@ -66,7 +86,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="glass-card gaming-gradient p-6 rounded-[2.5rem] border-yellow-500/20 flex items-center justify-between group">
+                <div class="glass-card gaming-gradient p-6 rounded-[2.5rem] border-yellow-500/20 flex items-center justify-between group transition">
                     <div class="flex items-center space-x-4">
                         <div class="w-14 h-14 rounded-2xl bg-yellow-500/10 flex items-center justify-center border border-yellow-500/20">
                             <i class="fas fa-fire text-yellow-500 text-2xl"></i>
@@ -100,7 +120,7 @@
                 <div class="rounded-[2rem] overflow-hidden aspect-video bg-black mb-6 border border-white/5">
                     <iframe id="live-yt-video" class="w-full h-full" src="" frameborder="0" allowfullscreen></iframe>
                 </div>
-                <a href="https://youtube.com/@AZNVision-d9g" target="_blank" class="block w-full py-4 bg-red-600 text-white text-center font-black uppercase text-[10px] tracking-[0.3em] rounded-2xl">Subscribe Now</a>
+                <button onclick="openYT()" class="block w-full py-4 bg-red-600 text-white text-center font-black uppercase text-[10px] tracking-[0.3em] rounded-2xl">Select Channel</button>
             </div>
         </section>
 
@@ -161,6 +181,9 @@
     </div>
 
     <script>
+        function openYT() { document.getElementById('yt-modal').style.display = 'flex'; }
+        function closeYT() { document.getElementById('yt-modal').style.display = 'none'; }
+
         const YT_API_KEY = "AIzaSyDeM2vSMrTAEWQPmBIHKspnhrbOJCY9vCM";
         const CHANNEL_ID = "UCQqGwkjnmZ6b5iKprYXmmsg";
 
@@ -172,10 +195,10 @@
                 document.getElementById('yt-subs').innerText = s.subscriberCount + " Subs";
                 document.getElementById('yt-views').innerText = s.viewCount + " Views";
                 
-                const vRes = await fetch(`https://www.googleapis.com/youtube/v3/search?key=${YT_API_KEY}&channelId=${CHANNEL_ID}&part=id,snippet&order=date&maxResults=1&type=video`);
+                const vRes = await fetch(`https://www.googleapis.com/youtube/v3/search?key=${YT_API_KEY}&channelId=${CHANNEL_ID}&part=id&order=date&maxResults=1&type=video`);
                 const vData = await vRes.json();
                 if(vData.items.length > 0) {
-                    document.getElementById('live-yt-video').src = `https://www.youtube.com/embed/${vData.items[0].id.videoId}?autoplay=0&rel=0`;
+                    document.getElementById('live-yt-video').src = `https://www.youtube.com/embed/${vData.items[0].id.videoId}`;
                 }
             } catch(e) {}
         }
@@ -202,5 +225,4 @@
         });
     </script>
 </body>
-    </html>
-    
+</html>
