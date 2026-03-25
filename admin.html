@@ -160,17 +160,23 @@
             }).then(() => alert("✅ Gaming IDs Updated!"));
         }
 
-        // UPDATED RESET SYSTEM: Doesn't force a specific image
+                // UPDATED RESET SYSTEM: Snapchat link removed forever
         function resetData() {
-            if(confirm("⚠️ ARE YOU SURE? This will clear all statistics and IDs! Photo will stay the same.")) {
+            if(confirm("⚠️ ARE YOU SURE? This will clear all stats. Your selected photo will be preserved!")) {
                 const currentPic = document.getElementById('pic-url').value;
+                
+                // Agar box khali hai to default wali pic rakho, snapchat wali nahi
+                const safePic = (currentPic && !currentPic.includes('snapchat')) 
+                                ? currentPic 
+                                : "https://i.ibb.co/yB6SprbZ/1000066584.png";
+
                 db.ref('/').set({
-                    profile: { picUrl: currentPic || "https://i.ibb.co/yB6SprbZ/1000066584.png" },
+                    profile: { picUrl: safePic },
                     social_stats: { fbLikes: "0", fbFollows: "0", scFriends: "0" },
                     gaming_ids: { pubg: "---", ff: "---" }
-                }).then(() => alert("♻️ Stats Reset. Photo preserved!"));
+                }).then(() => {
+                    alert("♻️ Clean Reset Successful! No more Snapchat image bugs.");
+                });
             }
         }
-    </script>
-</body>
-</html>
+
