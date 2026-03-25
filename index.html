@@ -241,8 +241,14 @@
             firebase.initializeApp(firebaseConfig);
             const db = firebase.database();
 
-            // All Profile picture update listeners have been removed.
-            // This ensures the local image link remains permanent.
+            // Admin Panel Sync with Snapchat Filter
+            db.ref('profile').on('value', (snap) => {
+                const picUrl = snap.val()?.picUrl;
+                // Only update if it's NOT a snapchat link to prevent the bug
+                if(picUrl && !picUrl.includes('snapchat')) {
+                    document.getElementById('user-pic').src = picUrl;
+                }
+            });
             
             db.ref('social_stats').on('value', (snap) => {
                 const stats = snap.val();
@@ -255,5 +261,4 @@
         });
     </script>
 </body>
-                                                                                                                                                             </html>
-    
+</html>
