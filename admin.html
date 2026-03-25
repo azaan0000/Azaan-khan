@@ -37,13 +37,9 @@
             border-color: #38bdf8 !important; 
             outline: none; 
             box-shadow: 0 0 15px rgba(56, 189, 248, 0.2);
-            transform: translateY(-1px);
         }
         .btn-hover { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
         .btn-hover:active { transform: scale(0.95); }
-        ::-webkit-scrollbar { width: 5px; }
-        ::-webkit-scrollbar-track { background: #020617; }
-        ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 10px; }
     </style>
 </head>
 <body class="min-h-screen p-6 pb-20">
@@ -59,61 +55,50 @@
 
         <div class="admin-card p-6 rounded-[2.5rem] mb-6 border-t border-sky-500/20">
             <h2 class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-5 flex items-center">
-                <i class="fas fa-image mr-2 text-sky-500"></i> Identity Image
+                <i class="fas fa-image mr-2 text-sky-500"></i> Profile Picture Link
             </h2>
-            <input type="text" id="pic-url" placeholder="Paste direct image link..." class="w-full p-4 rounded-2xl text-sm mb-4">
-            <button onclick="updatePic()" class="btn-hover w-full bg-sky-600 hover:bg-sky-500 text-white font-black py-4 rounded-2xl uppercase text-[10px] tracking-[0.2em] shadow-lg shadow-sky-900/20">Update Display Picture</button>
+            <input type="text" id="pic-url" placeholder="Paste Postimg or Direct link..." class="w-full p-4 rounded-2xl text-sm mb-4">
+            <button onclick="updatePic()" class="btn-hover w-full bg-sky-600 hover:bg-sky-500 text-white font-black py-4 rounded-2xl uppercase text-[10px] tracking-[0.2em]">Update Profile Picture</button>
         </div>
 
         <div class="admin-card p-6 rounded-[2.5rem] mb-6 border-t border-blue-500/20">
             <h2 class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-5 flex items-center">
-                <i class="fas fa-chart-bar mr-2 text-blue-500"></i> Analytics Dashboard
+                <i class="fas fa-chart-bar mr-2 text-blue-500"></i> Social Media Stats
             </h2>
             <div class="grid grid-cols-2 gap-4 mb-4">
                 <div>
                     <label class="text-[9px] font-black uppercase text-slate-500 ml-3 mb-1 block">FB Likes</label>
-                    <input type="text" id="fb-likes" placeholder="e.g. 13k" class="w-full p-4 rounded-2xl text-sm">
+                    <input type="text" id="fb-likes" class="w-full p-4 rounded-2xl text-sm">
                 </div>
                 <div>
                     <label class="text-[9px] font-black uppercase text-slate-500 ml-3 mb-1 block">FB Followers</label>
-                    <input type="text" id="fb-follows" placeholder="e.g. 285" class="text-sm w-full p-4 rounded-2xl">
+                    <input type="text" id="fb-follows" class="w-full p-4 rounded-2xl text-sm">
                 </div>
             </div>
             <label class="text-[9px] font-black uppercase text-slate-500 ml-3 mb-1 block">Snapchat Friends</label>
-            <input type="text" id="sc-friends" placeholder="e.g. 34 Friends" class="w-full p-4 rounded-2xl text-sm mb-6">
-            <button onclick="updateStats()" class="btn-hover w-full bg-blue-600 hover:bg-blue-500 text-white font-black py-4 rounded-2xl uppercase text-[10px] tracking-[0.2em] shadow-lg shadow-blue-900/20">Save Real-time Stats</button>
+            <input type="text" id="sc-friends" class="w-full p-4 rounded-2xl text-sm mb-6">
+            <button onclick="updateStats()" class="btn-hover w-full bg-blue-600 hover:bg-blue-500 text-white font-black py-4 rounded-2xl uppercase text-[10px] tracking-[0.2em]">Save All Stats</button>
         </div>
 
         <div class="admin-card p-6 rounded-[2.5rem] mb-6 border-t border-orange-500/20">
             <h2 class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-5 flex items-center">
-                <i class="fas fa-gamepad mr-2 text-orange-500"></i> Pro Gaming Config
+                <i class="fas fa-gamepad mr-2 text-orange-500"></i> Gaming IDs
             </h2>
             <div class="space-y-4 mb-6">
-                <div>
-                    <label class="text-[9px] font-black uppercase text-slate-500 ml-3 mb-1 block text-orange-500/70">PUBG Mobile ID</label>
-                    <input type="text" id="pubg-id" placeholder="Enter ID..." class="w-full p-4 rounded-2xl text-sm">
-                </div>
-                <div>
-                    <label class="text-[9px] font-black uppercase text-slate-500 ml-3 mb-1 block text-yellow-500/70">Free Fire ID</label>
-                    <input type="text" id="ff-id" placeholder="Enter ID..." class="w-full p-4 rounded-2xl text-sm">
-                </div>
+                <input type="text" id="pubg-id" placeholder="PUBG ID..." class="w-full p-4 rounded-2xl text-sm">
+                <input type="text" id="ff-id" placeholder="Free Fire ID..." class="w-full p-4 rounded-2xl text-sm">
             </div>
-            <button onclick="updateGaming()" class="btn-hover w-full bg-orange-600 hover:bg-orange-500 text-white font-black py-4 rounded-2xl uppercase text-[10px] tracking-[0.2em] shadow-lg shadow-orange-900/20">Sync Gaming IDs</button>
+            <button onclick="updateGaming()" class="btn-hover w-full bg-orange-600 hover:bg-orange-500 text-white font-black py-4 rounded-2xl uppercase text-[10px] tracking-[0.2em]">Sync Gaming IDs</button>
         </div>
 
         <div class="admin-card p-4 rounded-[2rem] border-t border-red-500/20 text-center">
             <button onclick="resetData()" class="text-[9px] font-black uppercase tracking-[0.3em] text-red-500/50 hover:text-red-500 transition-colors">
-                <i class="fas fa-undo-alt mr-2"></i> Reset All Data (Excluding Photo)
+                <i class="fas fa-undo-alt mr-2"></i> Hard Reset Data
             </button>
         </div>
-
-        <p class="text-center text-[8px] text-slate-600 uppercase tracking-[0.5em] font-bold mt-10">
-            Encrypted Connection <i class="fas fa-lock ml-1 text-sky-800"></i>
-        </p>
     </div>
 
     <script>
-        // Firebase Config
         const firebaseConfig = { 
             apiKey: "AIzaSyC1H9oxa0ZI7vbXDPGxvmHdwT0WrqDC92s", 
             databaseURL: "https://azaan-web-default-rtdb.firebaseio.com", 
@@ -122,17 +107,15 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
-        // Load Data and keep fields synced
+        // Load Data from Firebase on startup
         db.ref().on('value', (snap) => {
             const data = snap.val();
             if(!data) return;
+            if(data.profile) document.getElementById('pic-url').value = data.profile.picUrl || '';
             if(data.social_stats) {
                 document.getElementById('fb-likes').value = data.social_stats.fbLikes || '';
                 document.getElementById('fb-follows').value = data.social_stats.fbFollows || '';
                 document.getElementById('sc-friends').value = data.social_stats.scFriends || '';
-            }
-            if(data.profile) {
-                document.getElementById('pic-url').value = data.profile.picUrl || '';
             }
             if(data.gaming_ids) {
                 document.getElementById('pubg-id').value = data.gaming_ids.pubg || '';
@@ -142,7 +125,11 @@
 
         function updatePic() {
             const url = document.getElementById('pic-url').value;
-            db.ref('profile').update({ picUrl: url }).then(() => alert("✅ DP Updated!"));
+            if(url.includes('snapchat')) {
+                alert("❌ Snapchat links are blocked to prevent bugs!");
+                return;
+            }
+            db.ref('profile').update({ picUrl: url }).then(() => alert("✅ Photo Updated!"));
         }
 
         function updateStats() {
@@ -150,33 +137,28 @@
                 fbLikes: document.getElementById('fb-likes').value,
                 fbFollows: document.getElementById('fb-follows').value,
                 scFriends: document.getElementById('sc-friends').value
-            }).then(() => alert("✅ Stats Synchronized!"));
+            }).then(() => alert("✅ Stats Saved!"));
         }
 
         function updateGaming() {
             db.ref('gaming_ids').update({
                 pubg: document.getElementById('pubg-id').value,
                 ff: document.getElementById('ff-id').value
-            }).then(() => alert("✅ Gaming IDs Updated!"));
+            }).then(() => alert("✅ IDs Updated!"));
         }
 
-                // UPDATED RESET SYSTEM: Snapchat link removed forever
         function resetData() {
-            if(confirm("⚠️ ARE YOU SURE? This will clear all stats. Your selected photo will be preserved!")) {
+            if(confirm("⚠️ Reset all stats? Your profile pic will stay.")) {
                 const currentPic = document.getElementById('pic-url').value;
+                const safePic = (currentPic && !currentPic.includes('snapchat')) ? currentPic : "https://i.ibb.co/yB6SprbZ/1000066584.png";
                 
-                // Agar box khali hai to default wali pic rakho, snapchat wali nahi
-                const safePic = (currentPic && !currentPic.includes('snapchat')) 
-                                ? currentPic 
-                                : "https://i.ibb.co/yB6SprbZ/1000066584.png";
-
                 db.ref('/').set({
                     profile: { picUrl: safePic },
                     social_stats: { fbLikes: "0", fbFollows: "0", scFriends: "0" },
                     gaming_ids: { pubg: "---", ff: "---" }
-                }).then(() => {
-                    alert("♻️ Clean Reset Successful! No more Snapchat image bugs.");
-                });
+                }).then(() => alert("♻️ Reset Complete!"));
             }
         }
-
+    </script>
+</body>
+</html>
