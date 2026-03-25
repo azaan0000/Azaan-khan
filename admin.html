@@ -9,7 +9,6 @@
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
     <style>
-        /* Professional Walking Gradient Background */
         body { 
             background: linear-gradient(-45deg, #020617, #0f172a, #1e1b4b, #020617);
             background-size: 400% 400%;
@@ -17,38 +16,31 @@
             font-family: 'Inter', sans-serif;
             color: #e2e8f0;
         }
-
         @keyframes gradientBG {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
         }
-
         .admin-card { 
             background: rgba(255, 255, 255, 0.03); 
             backdrop-filter: blur(20px); 
             border: 1px solid rgba(255, 255, 255, 0.08); 
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
         }
-
         input { 
             background: rgba(0, 0, 0, 0.4) !important; 
             border: 1px solid rgba(255, 255, 255, 0.1) !important; 
             color: white !important; 
             transition: all 0.3s ease; 
         }
-
         input:focus { 
             border-color: #38bdf8 !important; 
             outline: none; 
             box-shadow: 0 0 15px rgba(56, 189, 248, 0.2);
             transform: translateY(-1px);
         }
-
         .btn-hover { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
         .btn-hover:active { transform: scale(0.95); }
-        
-        /* Custom Scrollbar */
         ::-webkit-scrollbar { width: 5px; }
         ::-webkit-scrollbar-track { background: #020617; }
         ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 10px; }
@@ -84,7 +76,7 @@
                 </div>
                 <div>
                     <label class="text-[9px] font-black uppercase text-slate-500 ml-3 mb-1 block">FB Followers</label>
-                    <input type="text" id="fb-follows" placeholder="e.g. 285" class="w-full p-4 rounded-2xl text-sm">
+                    <input type="text" id="fb-follows" placeholder="e.g. 285" class="text-sm w-full p-4 rounded-2xl">
                 </div>
             </div>
             <label class="text-[9px] font-black uppercase text-slate-500 ml-3 mb-1 block">Snapchat Friends</label>
@@ -111,7 +103,7 @@
 
         <div class="admin-card p-4 rounded-[2rem] border-t border-red-500/20 text-center">
             <button onclick="resetData()" class="text-[9px] font-black uppercase tracking-[0.3em] text-red-500/50 hover:text-red-500 transition-colors">
-                <i class="fas fa-undo-alt mr-2"></i> Reset All Data to Default
+                <i class="fas fa-undo-alt mr-2"></i> Reset All Data (Excluding Photo)
             </button>
         </div>
 
@@ -130,7 +122,7 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
-        // Load Data
+        // Load Data and keep fields synced
         db.ref().on('value', (snap) => {
             const data = snap.val();
             if(!data) return;
@@ -139,14 +131,15 @@
                 document.getElementById('fb-follows').value = data.social_stats.fbFollows || '';
                 document.getElementById('sc-friends').value = data.social_stats.scFriends || '';
             }
-            if(data.profile) document.getElementById('pic-url').value = data.profile.picUrl || '';
+            if(data.profile) {
+                document.getElementById('pic-url').value = data.profile.picUrl || '';
+            }
             if(data.gaming_ids) {
                 document.getElementById('pubg-id').value = data.gaming_ids.pubg || '';
                 document.getElementById('ff-id').value = data.gaming_ids.ff || '';
             }
         });
 
-        // Functions
         function updatePic() {
             const url = document.getElementById('pic-url').value;
             db.ref('profile').update({ picUrl: url }).then(() => alert("✅ DP Updated!"));
@@ -167,17 +160,17 @@
             }).then(() => alert("✅ Gaming IDs Updated!"));
         }
 
-        // RESET SYSTEM
+        // UPDATED RESET SYSTEM: Doesn't force a specific image
         function resetData() {
-            if(confirm("⚠️ ARE YOU SURE? This will clear all statistics and IDs!")) {
+            if(confirm("⚠️ ARE YOU SURE? This will clear all statistics and IDs! Photo will stay the same.")) {
+                const currentPic = document.getElementById('pic-url').value;
                 db.ref('/').set({
-                    profile: { picUrl: "https://i.ibb.co/yB6SprbZ/1000066584.png" },
+                    profile: { picUrl: currentPic || "https://i.ibb.co/yB6SprbZ/1000066584.png" },
                     social_stats: { fbLikes: "0", fbFollows: "0", scFriends: "0" },
                     gaming_ids: { pubg: "---", ff: "---" }
-                }).then(() => alert("♻️ All Data Reset Successfully!"));
+                }).then(() => alert("♻️ Stats Reset. Photo preserved!"));
             }
         }
     </script>
 </body>
-    </html>
-    
+</html>
