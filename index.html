@@ -241,7 +241,9 @@
             firebase.initializeApp(firebaseConfig);
             const db = firebase.database();
 
-            // Profile update script deleted to fix Snapchat pic problem
+            // All Profile picture update listeners have been removed.
+            // This ensures the local image link remains permanent.
+            
             db.ref('social_stats').on('value', (snap) => {
                 const stats = snap.val();
                 if(stats) {
@@ -253,5 +255,5 @@
         });
     </script>
 </body>
-                </html>
-                
+                                                                                                                                                             </html>
+    
