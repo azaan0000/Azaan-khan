@@ -10,6 +10,9 @@
     <meta name="author" content="Azaan Khan">
     <meta name="robots" content="index, follow">
 
+    <link rel="icon" type="image/png" href="https://i.ibb.co/676vPq8x/1000061896.jpg">
+    <link rel="apple-touch-icon" href="https://i.ibb.co/676vPq8x/1000061896.jpg">
+
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -17,7 +20,7 @@
       "name": "Azaan Khan",
       "alternateName": "Azaan Khan Official",
       "url": "https://azaan0000.github.io/Azaan-khan/",
-      "image": "https://i.ibb.co/6R8m4Yf6/1000061896.jpg",
+      "image": "https://i.ibb.co/676vPq8x/1000061896.jpg",
       "sameAs": [
         "https://youtube.com/@AZNVision-d9g",
         "https://www.tiktok.com/@aaazaan0",
@@ -25,6 +28,14 @@
         "https://www.snapchat.com/add/aaazaan786"
       ],
       "jobTitle": "Digital Creator & Web Developer"
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Azaan Khan Official",
+      "url": "https://azaan0000.github.io/Azaan-khan/"
     }
     </script>
 
@@ -58,7 +69,7 @@
     <div class="max-w-3xl mx-auto px-6 py-12 text-center">
         <header class="mb-12">
             <div class="relative inline-block mb-4">
-                <img id="user-pic" src="https://i.ibb.co/6R8m4Yf6/1000061896.jpg" loading="lazy" class="w-32 h-32 rounded-full border-4 border-sky-500 shadow-2xl object-cover bg-slate-800" alt="Azaan Khan">
+                <img id="user-pic" src="https://i.ibb.co/676vPq8x/1000061896.jpg" loading="lazy" class="w-32 h-32 rounded-full border-4 border-sky-500 shadow-2xl object-cover bg-slate-800" alt="Azaan Khan Official">
                 <div class="absolute bottom-2 right-2 w-6 h-6 bg-green-500 border-4 border-slate-950 rounded-full"></div>
             </div>
             <h1 class="text-5xl font-black mb-1 italic uppercase tracking-tighter text-white">Azaan Khan</h1>
@@ -160,7 +171,7 @@
             <div class="glass-card rounded-[2.5rem] p-8 border-yellow-400/10">
                 <div class="flex items-center mb-8">
                     <div class="w-20 h-20 rounded-3xl bg-yellow-400 flex items-center justify-center p-2">
-                        <img src="https://i.ibb.co/yB6SprbZ/1000066584.png" loading="lazy" class="w-full h-full object-contain" alt="Snap">
+                        <img src="https://i.ibb.co/676vPq8x/1000061896.jpg" loading="lazy" class="w-full h-full object-contain" alt="Snap">
                     </div>
                     <div class="ml-6">
                         <h3 class="font-black text-2xl uppercase tracking-tighter">aaazaan786</h3>
@@ -241,9 +252,10 @@
                     document.getElementById('sc-friends-val').innerText = (stats.scFriends || "---") + " Friends";
                 }
             });
-            // Note: Firebase profile URL logic humne override kr di ha with static image URL above
+            db.ref('profile').on('value', (snap) => {
+                if(snap.val()?.picUrl) document.getElementById('user-pic').src = snap.val().picUrl;
+            });
         });
     </script>
 </body>
-            </html>
-            
+</html>
