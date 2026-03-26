@@ -3,26 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/png" href="https://i.ibb.co/yB6SprbZ/1000066584.png">
-    <link rel="apple-touch-icon" href="https://i.ibb.co/yB6SprbZ/1000066584.png">
-    <meta name="msapplication-TileImage" content="https://i.ibb.co/yB6SprbZ/1000066584.png">
     
-    <title>Azaan Khan Official | Digital Creator & Web Developer</title>
+    <title>Azaan Khan Official | Web Developer & Digital Creator</title>
     <meta name="description" content="Welcome to the official hub of Azaan Khan. Digital Creator, Web Developer, and Professional Gamer. Explore my YouTube (AZN Vision), TikTok, and Gaming IDs.">
     <meta name="keywords" content="Azaan Khan Official, Azaan Khan, AZN Vision, Azaan Khan Web Developer, Azaan Khan Portfolio, Azaan Khan Digital Creator">
     <meta name="author" content="Azaan Khan">
     <meta name="robots" content="index, follow">
 
-    <meta property="og:title" content="Azaan Khan Official">
-    <meta property="og:image" content="https://i.ibb.co/yB6SprbZ/1000066584.png">
-    <meta property="og:url" content="https://azaan0000.github.io/Azaan-khan/">
-    <meta property="og:type" content="website">
-
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "Person",
-      "name": "Azaan Khan Official",
+      "name": "Azaan Khan",
+      "alternateName": "Azaan Khan Official",
       "url": "https://azaan0000.github.io/Azaan-khan/",
       "image": "https://i.ibb.co/yB6SprbZ/1000066584.png",
       "sameAs": [
@@ -65,7 +58,7 @@
     <div class="max-w-3xl mx-auto px-6 py-12 text-center">
         <header class="mb-12">
             <div class="relative inline-block mb-4">
-                <img id="user-pic" src="https://i.ibb.co/yB6SprbZ/1000066584.png" loading="lazy" class="w-32 h-32 rounded-full border-4 border-sky-500 shadow-2xl object-cover bg-slate-800" alt="Azaan">
+                <img id="user-pic" src="https://via.placeholder.com/150" loading="lazy" class="w-32 h-32 rounded-full border-4 border-sky-500 shadow-2xl object-cover bg-slate-800" alt="Azaan">
                 <div class="absolute bottom-2 right-2 w-6 h-6 bg-green-500 border-4 border-slate-950 rounded-full"></div>
             </div>
             <h1 class="text-5xl font-black mb-1 italic uppercase tracking-tighter text-white">Azaan Khan</h1>
@@ -93,7 +86,7 @@
 
         <section class="text-left mb-12">
             <h2 class="text-[10px] font-bold mb-4 flex items-center text-gray-500 uppercase tracking-[0.3em] px-2">
-                <i class="fas fa-gamepad mr-2 text-sky-500"></i> Professional Gaming IDs 
+                <i class="fas fa-gamepad mr-2 text-sky-500"></i> Professional Gaming IDs (Copy)
             </h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div onclick="copyID('52183640460')" class="glass-card p-6 rounded-[2.5rem] border-orange-500/20 flex flex-col justify-between cursor-pointer active:scale-95 transition">
@@ -132,7 +125,7 @@
 
         <section class="text-left mb-10">
             <h2 class="text-[10px] font-bold mb-4 flex items-center text-gray-500 uppercase tracking-[0.2em] px-2">
-                <span class="blink blink-red"></span> YouTube Live - AZN Vision 
+                <span class="blink blink-red"></span> YouTube Live - Azaan Khan Official
             </h2>
             <div class="glass-card rounded-[2.5rem] p-6 border-red-500/20 shadow-2xl">
                 <div class="flex items-center mb-6">
@@ -240,16 +233,6 @@
             };
             firebase.initializeApp(firebaseConfig);
             const db = firebase.database();
-
-            // Admin Panel Sync with Snapchat Filter
-            db.ref('profile').on('value', (snap) => {
-                const picUrl = snap.val()?.picUrl;
-                // Only update if it's NOT a snapchat link to prevent the bug
-                if(picUrl && !picUrl.includes('snapchat')) {
-                    document.getElementById('user-pic').src = picUrl;
-                }
-            });
-            
             db.ref('social_stats').on('value', (snap) => {
                 const stats = snap.val();
                 if(stats) {
@@ -258,7 +241,10 @@
                     document.getElementById('sc-friends-val').innerText = (stats.scFriends || "---") + " Friends";
                 }
             });
+            db.ref('profile').on('value', (snap) => {
+                if(snap.val()?.picUrl) document.getElementById('user-pic').src = snap.val().picUrl;
+            });
         });
     </script>
 </body>
-</html>
+    </html>
