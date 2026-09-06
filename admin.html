@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Azaan | Control Panel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+<style>
+  :root{
+    --ink:#0A0B12; --panel:#12131C; --line:rgba(232,233,237,0.08);
+    --text:#E8E9ED; --muted:#7D7F8E;
+    --signal:#FF6B35; --dev:#3DDC97; --game:#FFC857;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--ink);color:var(--text);font-family:'Inter',sans-serif;padding:24px 18px 60px;}
+  .wrap{max-width:440px;margin:0 auto;}
+  h1{font-family:'Space Grotesk',sans-serif;font-size:24px;margin:0 0 4px;}
+  .sub{font-size:11px;color:var(--muted);font-family:'IBM Plex Mono',monospace;margin-bottom:28px;}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:18px;margin-bottom:14px;}
+  .card-title{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);margin-bottom:14px;}
+  label{font-size:10px;color:var(--muted);display:block;margin:0 0 5px 2px;}
+  input{
+    width:100%;background:var(--ink);border:1px solid var(--line);color:var(--text);
+    padding:12px 14px;border-radius:10px;font-size:13px;margin-bottom:12px;font-family:'Inter',sans-serif;
+  }
+  input:focus{outline:none;border-color:var(--dev);}
+  .row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  button{
+    width:100%;border:0;padding:13px;border-radius:10px;font-weight:600;font-size:12px;
+    font-family:'Space Grotesk',sans-serif;cursor:pointer;color:#fff;
+  }
+  .btn-signal{background:var(--signal);}
+  .btn-dev{background:var(--dev);color:var(--ink);}
+  .btn-game{background:var(--game);color:var(--ink);}
+  .danger{background:transparent;color:#8a4444;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;text-decoration:underline;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Control Panel</h1>
+  <div class="sub">azaankhan.official — live data</div>
+
+  <div class="card">
+    <div class="card-title">Profile Picture</div>
+    <input type="text" id="pic-url" placeholder="Paste image link...">
+    <button class="btn-dev" onclick="updatePic()">Update Picture</button>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Social Stats</div>
+    <div class="row">
+      <div><label>FB Likes</label><input type="text" id="fb-likes"></div>
+      <div><label>FB Followers</label><input type="text" id="fb-follows"></div>
+    </div>
+    <label>Snapchat Friends</label>
+    <input type="text" id="sc-friends">
+    <button class="btn-signal" onclick="updateStats()">Save Stats</button>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Gaming IDs</div>
+    <label>PUBG ID</label>
+    <input type="text" id="pubg-id">
+    <label>Free Fire ID</label>
+    <input type="text" id="ff-id">
+    <button class="btn-game" onclick="updateGaming()">Sync IDs</button>
+  </div>
+
+  <div class="card" style="text-align:center;">
+    <button class="danger" onclick="resetData()">Hard reset data</button>
+  </div>
+</div>
+
+<script>
+  const firebaseConfig={
+    apiKey:"AIzaSyC1H9oxa0ZI7vbXDPGxvmHdwT0WrqDC92s",
+    databaseURL:"https://azaan-web-default-rtdb.firebaseio.com",
+    projectId:"azaan-web"
+  };
+  firebase.initializeApp(firebaseConfig);
+  const db=firebase.database();
+
+  db.ref().on('value',(snap)=>{
+    const data=snap.val();
+    if(!data) return;
+    if(data.profile) document.getElementById('pic-url').value=data.profile.picUrl||'';
+    if(data.social_stats){
+      document.getElementById('fb-likes').value=data.social_stats.fbLikes||'';
+      document.getElementById('fb-follows').value=data.social_stats.fbFollows||'';
+      document.getElementById('sc-friends').value=data.social_stats.scFriends||'';
+    }
+    if(data.gaming_ids){
+      document.getElementById('pubg-id').value=data.gaming_ids.pubg||'';
+      document.getElementById('ff-id').value=data.gaming_ids.ff||'';
+    }
+  });
+
+  function updatePic(){
+    const url=document.getElementById('pic-url').value;
+    if(url.includes('snapchat')){ alert("Snapchat links are blocked to prevent bugs."); return; }
+    db.ref('profile').update({picUrl:url}).then(()=>alert("Photo updated."));
+  }
+  function updateStats(){
+    db.ref('social_stats').update({
+      fbLikes:document.getElementById('fb-likes').value,
+      fbFollows:document.getElementById('fb-follows').value,
+      scFriends:document.getElementById('sc-friends').value
+    }).then(()=>alert("Stats saved."));
+  }
+  function updateGaming(){
+    db.ref('gaming_ids').update({
+      pubg:document.getElementById('pubg-id').value,
+      ff:document.getElementById('ff-id').value
+    }).then(()=>alert("IDs updated."));
+  }
+  function resetData(){
+    if(confirm("Reset all stats? Profile picture will stay.")){
+      const currentPic=document.getElementById('pic-url').value;
+      const safePic=(currentPic && !currentPic.includes('snapchat')) ? currentPic : "https://i.ibb.co/yB6SprbZ/1000066584.png";
+      db.ref('/').set({
+        profile:{picUrl:safePic},
+        social_stats:{fbLikes:"0",fbFollows:"0",scFriends:"0"},
+        gaming_ids:{pubg:"---",ff:"---"}
+      }).then(()=>alert("Reset complete."));
+    }
+  }
+</script>
+</body>
+</html>
