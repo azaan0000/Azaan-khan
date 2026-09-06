@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Azaan | Control Panel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-storage-compat.js"></script>
+<style>
+  :root{
+    --ink:#0A0B12; --panel:#12131C; --line:rgba(232,233,237,0.08);
+    --text:#E8E9ED; --muted:#7D7F8E;
+    --signal:#FF6B35; --dev:#3DDC97; --game:#FFC857;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--ink);color:var(--text);font-family:'Inter',sans-serif;padding:24px 18px 60px;}
+  .wrap{max-width:440px;margin:0 auto;}
+  h1{font-family:'Space Grotesk',sans-serif;font-size:24px;margin:0 0 4px;}
+  .sub{font-size:11px;color:var(--muted);font-family:'IBM Plex Mono',monospace;margin-bottom:28px;}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:18px;margin-bottom:14px;}
+  .card-title{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);margin-bottom:14px;}
+  label{font-size:10px;color:var(--muted);display:block;margin:0 0 5px 2px;}
+  input{
+    width:100%;background:var(--ink);border:1px solid var(--line);color:var(--text);
+    padding:12px 14px;border-radius:10px;font-size:13px;margin-bottom:12px;font-family:'Inter',sans-serif;
+  }
+  input:focus{outline:none;border-color:var(--dev);}
+  .row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  button{
+    width:100%;border:0;padding:13px;border-radius:10px;font-weight:600;font-size:12px;
+    font-family:'Space Grotesk',sans-serif;cursor:pointer;color:#fff;
+  }
+  .btn-signal{background:var(--signal);}
+  .btn-dev{background:var(--dev);color:var(--ink);}
+  .btn-game{background:var(--game);color:var(--ink);}
+  .danger{background:transparent;color:#8a4444;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;text-decoration:underline;}
+  textarea{
+    width:100%;background:var(--ink);border:1px solid var(--line);color:var(--text);
+    padding:12px 14px;border-radius:10px;font-size:13px;margin-bottom:12px;font-family:'Inter',sans-serif;
+    resize:vertical;min-height:70px;
+  }
+  textarea:focus{outline:none;border-color:var(--signal);}
+  .file-drop{
+    border:1px dashed var(--line);border-radius:10px;padding:16px;text-align:center;
+    font-size:12px;color:var(--muted);margin-bottom:12px;
+  }
+  .queue-item{
+    display:flex;justify-content:space-between;align-items:center;
+    background:var(--ink);border:1px solid var(--line);border-radius:10px;
+    padding:10px 12px;margin-bottom:8px;font-size:11px;
+  }
+  .queue-status{font-family:'IBM Plex Mono',monospace;font-size:9px;padding:3px 8px;border-radius:20px;text-transform:uppercase;}
+  .st-pending{background:rgba(255,200,87,0.12);color:var(--game);}
+  .st-processing{background:rgba(61,220,151,0.12);color:var(--dev);}
+  .st-done{background:rgba(76,126,255,0.12);color:#4C7EFF;}
+  .st-failed{background:rgba(255,107,53,0.15);color:var(--signal);}
+  progress{width:100%;height:6px;border-radius:6px;margin-bottom:12px;accent-color:var(--signal);}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Control Panel</h1>
+  <div class="sub">azaankhan.official — live data</div>
+
+  <div class="card">
+    <div class="card-title">Profile Picture</div>
+    <input type="text" id="pic-url" placeholder="Paste image link...">
+    <button class="btn-dev" onclick="updatePic()">Update Picture</button>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Snapchat</div>
+    <label>Snapchat Friends</label>
+    <input type="text" id="sc-friends">
+    <button class="btn-signal" onclick="updateStats()">Save</button>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Gaming IDs</div>
+    <label>PUBG ID</label>
+    <input type="text" id="pubg-id">
+    <label>Free Fire ID</label>
+    <input type="text" id="ff-id">
+    <button class="btn-game" onclick="updateGaming()">Sync IDs</button>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Upload &amp; Auto-Post</div>
+    <div class="file-drop">Select a video or image to publish</div>
+    <input type="file" id="post-file" accept="video/*,image/*">
+    <label>What's this about? (helps the AI write accurate SEO)</label>
+    <textarea id="post-context" placeholder="e.g. street food tour in Karachi, night market stalls, close-up shots of grilled kebabs"></textarea>
+    <progress id="upload-progress" value="0" max="100" style="display:none;"></progress>
+    <button class="btn-signal" onclick="uploadPost()">Upload &amp; Queue for Posting</button>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Posting Queue</div>
+    <div id="queue-list" style="font-size:11px;color:var(--muted);">No items yet.</div>
+  </div>
+
+  <div class="card" style="text-align:center;">
+    <button class="danger" onclick="resetData()">Hard reset data</button>
+  </div>
+</div>
+
+<script>
+  const firebaseConfig={
+    apiKey:"AIzaSyC1H9oxa0ZI7vbXDPGxvmHdwT0WrqDC92s",
+    databaseURL:"https://azaan-web-default-rtdb.firebaseio.com",
+    projectId:"azaan-web"
+  };
+  firebase.initializeApp(firebaseConfig);
+  const db=firebase.database();
+  const storage=firebase.storage();
+
+  db.ref().on('value',(snap)=>{
+    const data=snap.val();
+    if(!data) return;
+    if(data.profile) document.getElementById('pic-url').value=data.profile.picUrl||'';
+    if(data.social_stats){
+      document.getElementById('sc-friends').value=data.social_stats.scFriends||'';
+    }
+    if(data.gaming_ids){
+      document.getElementById('pubg-id').value=data.gaming_ids.pubg||'';
+      document.getElementById('ff-id').value=data.gaming_ids.ff||'';
+    }
+  });
+
+  function updatePic(){
+    const url=document.getElementById('pic-url').value;
+    if(url.includes('snapchat')){ alert("Snapchat links are blocked to prevent bugs."); return; }
+    db.ref('profile').update({picUrl:url}).then(()=>alert("Photo updated."));
+  }
+  function updateStats(){
+    db.ref('social_stats').update({
+      scFriends:document.getElementById('sc-friends').value
+    }).then(()=>alert("Stats saved."));
+  }
+  function updateGaming(){
+    db.ref('gaming_ids').update({
+      pubg:document.getElementById('pubg-id').value,
+      ff:document.getElementById('ff-id').value
+    }).then(()=>alert("IDs updated."));
+  }
+  function uploadPost(){
+    const fileInput=document.getElementById('post-file');
+    const context=document.getElementById('post-context').value.trim();
+    const file=fileInput.files[0];
+    if(!file){ alert("Pehle ek file select karo."); return; }
+    if(!context){ alert("Thoda context likho — AI ko iski zaroorat hai accurate title/description banane ke liye."); return; }
+
+    const bar=document.getElementById('upload-progress');
+    bar.style.display='block'; bar.value=0;
+
+    const path='posts/'+Date.now()+'_'+file.name;
+    const task=storage.ref(path).put(file);
+
+    task.on('state_changed',
+      (snap)=>{ bar.value=(snap.bytesTransferred/snap.totalBytes)*100; },
+      (err)=>{ alert("Upload failed: "+err.message); bar.style.display='none'; },
+      ()=>{
+        db.ref('queue').push({
+          storagePath:path,
+          fileName:file.name,
+          fileType:file.type,
+          context:context,
+          status:'pending',
+          createdAt:Date.now()
+        }).then(()=>{
+          alert("Queued! AI processing shuru hote hi ye niche list mein dikhega.");
+          fileInput.value=''; document.getElementById('post-context').value='';
+          bar.style.display='none';
+        });
+      }
+    );
+  }
+
+  function renderQueue(items){
+    const el=document.getElementById('queue-list');
+    if(!items || Object.keys(items).length===0){ el.innerHTML="No items yet."; return; }
+    const rows=Object.entries(items).sort((a,b)=>b[1].createdAt-a[1].createdAt).map(([id,item])=>{
+      const cls='st-'+(item.status||'pending');
+      return `<div class="queue-item"><span>${item.fileName||'file'}</span><span class="queue-status ${cls}">${item.status||'pending'}</span></div>`;
+    });
+    el.innerHTML=rows.join('');
+  }
+  db.ref('queue').on('value',(snap)=>renderQueue(snap.val()));
+
+  function resetData(){
+    if(confirm("Reset all stats? Profile picture will stay.")){
+      const currentPic=document.getElementById('pic-url').value;
+      const safePic=(currentPic && !currentPic.includes('snapchat')) ? currentPic : "https://i.ibb.co/yB6SprbZ/1000066584.png";
+      db.ref('/').set({
+        profile:{picUrl:safePic},
+        social_stats:{scFriends:"0"},
+        gaming_ids:{pubg:"---",ff:"---"}
+      }).then(()=>alert("Reset complete."));
+    }
+  }
+</script>
+</body>
+</html>
