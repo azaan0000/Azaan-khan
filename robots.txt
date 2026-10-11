@@ -1,3 +1,0 @@
-User-agent: *
-Allow: /
-Sitemap: https://azaan0000.github.io/Azaan-khan/sitemap.xml
