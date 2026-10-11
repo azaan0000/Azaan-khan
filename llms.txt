@@ -1,0 +1,23 @@
+# Azaan Khan
+
+> Azaan Khan is a full-stack web developer and digital creator from Pakistan, creator of the AZN Vision YouTube channel. He builds fast, SEO-optimized websites, SaaS platforms and AI-powered tools for small businesses.
+
+## Main
+- [Home](https://azaan0000.github.io/Azaan-khan/): Services, FAQ, contact and social links
+
+## Services
+- Business website development
+- SaaS platform development
+- AI-powered tools
+- Technical SEO optimization
+
+## Contact
+- WhatsApp / phone: +92 370 5840165
+- Email: azaanbk29@gmail.com
+- GitHub: https://github.com/azaan0000
+
+## Profiles
+- YouTube (AZN Vision): https://youtube.com/@AZNVision-d9g
+- TikTok: https://www.tiktok.com/@aaazaan0
+- Facebook: https://www.facebook.com/share/1GfrwnyX4F/
+- Snapchat: aaazaan786
